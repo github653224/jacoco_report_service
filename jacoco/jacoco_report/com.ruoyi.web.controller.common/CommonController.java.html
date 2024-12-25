@@ -49,26 +49,26 @@ import com.ruoyi.common.utils.file.FileUtils;
     {
         try
         {
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            if (!FileUtils.checkAllowDownload(fileName))</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (!FileUtils.checkAllowDownload(fileName))</span>
             {
 <span class="nc" id="L54">                throw new Exception(StringUtils.format(&quot;文件名称({})非法，不允许下载。 &quot;, fileName));</span>
             }
-<span class="fc" id="L56">            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf(&quot;_&quot;) + 1);</span>
-<span class="fc" id="L57">            String filePath = RuoYiConfig.getDownloadPath() + fileName;</span>
+<span class="nc" id="L56">            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf(&quot;_&quot;) + 1);</span>
+<span class="nc" id="L57">            String filePath = RuoYiConfig.getDownloadPath() + fileName;</span>
 
-<span class="fc" id="L59">            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);</span>
-<span class="fc" id="L60">            FileUtils.setAttachmentResponseHeader(response, realFileName);</span>
-<span class="fc" id="L61">            FileUtils.writeBytes(filePath, response.getOutputStream());</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (delete)</span>
+<span class="nc" id="L59">            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);</span>
+<span class="nc" id="L60">            FileUtils.setAttachmentResponseHeader(response, realFileName);</span>
+<span class="nc" id="L61">            FileUtils.writeBytes(filePath, response.getOutputStream());</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            if (delete)</span>
             {
-<span class="fc" id="L64">                FileUtils.deleteFile(filePath);</span>
+<span class="nc" id="L64">                FileUtils.deleteFile(filePath);</span>
             }
         }
-<span class="fc" id="L67">        catch (Exception e)</span>
+<span class="nc" id="L67">        catch (Exception e)</span>
         {
-<span class="fc" id="L69">            log.error(&quot;下载文件失败&quot;, e);</span>
-<span class="fc" id="L70">        }</span>
-<span class="fc" id="L71">    }</span>
+<span class="nc" id="L69">            log.error(&quot;下载文件失败&quot;, e);</span>
+<span class="nc" id="L70">        }</span>
+<span class="nc" id="L71">    }</span>
 
     /**
      * 通用上传请求（单个）

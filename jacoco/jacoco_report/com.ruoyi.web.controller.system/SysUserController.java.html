@@ -84,9 +84,9 @@ import com.ruoyi.system.service.ISysUserService;
     @ResponseBody
     public AjaxResult export(SysUser user)
     {
-<span class="fc" id="L87">        List&lt;SysUser&gt; list = userService.selectUserList(user);</span>
-<span class="fc" id="L88">        ExcelUtil&lt;SysUser&gt; util = new ExcelUtil&lt;SysUser&gt;(SysUser.class);</span>
-<span class="fc" id="L89">        return util.exportExcel(list, &quot;用户数据&quot;);</span>
+<span class="nc" id="L87">        List&lt;SysUser&gt; list = userService.selectUserList(user);</span>
+<span class="nc" id="L88">        ExcelUtil&lt;SysUser&gt; util = new ExcelUtil&lt;SysUser&gt;(SysUser.class);</span>
+<span class="nc" id="L89">        return util.exportExcel(list, &quot;用户数据&quot;);</span>
     }
 
     @Log(title = &quot;用户管理&quot;, businessType = BusinessType.IMPORT)

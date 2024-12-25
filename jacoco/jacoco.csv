@@ -15,13 +15,13 @@ JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysDictTypeController,197
 JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysIndexController,283,0,36,0,57,0,28,0,10,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysPostController,191,0,8,0,29,0,15,0,11,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysConfigController,148,0,4,0,25,0,13,0,11,0
-JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysUserController,593,15,36,0,86,3,42,1,24,1
+JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysUserController,608,0,36,0,89,0,43,0,25,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysRoleController,392,0,10,0,61,0,28,0,23,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.system,SysDeptController,252,0,20,0,43,0,21,0,11,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.domain,CustomerModel,76,0,0,0,27,0,14,0,14,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.domain,UserOperateModel,96,0,0,0,40,0,20,0,20,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.domain,GoodsModel,65,0,0,0,23,0,12,0,12,0
-JaCoCo Coverage Report,com.ruoyi.web.controller.common,CommonController,215,50,6,2,47,12,9,1,5,1
+JaCoCo Coverage Report,com.ruoyi.web.controller.common,CommonController,265,0,8,0,59,0,10,0,6,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.controller,DocumentModel,56,0,0,0,24,0,12,0,12,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.controller,DemoOperateController,945,0,36,0,121,0,35,0,17,0
 JaCoCo Coverage Report,com.ruoyi.web.controller.demo.controller,UserTableModel,96,0,0,0,40,0,20,0,20,0

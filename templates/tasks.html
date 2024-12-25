@@ -37,7 +37,7 @@
     <div class="mb-3">
         <label for="cron_expression" class="form-label">Cron 表达式</label>
         <input type="text" name="cron_expression" id="cron_expression" class="form-control" required>
-        <div class="form-text">示例: `*/5 * * * *` (每 5 分钟执行一次)</div>
+        <div class="form-text">(示例: `*/5 * * * *` 每5分钟执行一次),只支持5位不包括秒的简化版cron表达式<a href="https://cron.ciding.cc/" target="_blank">cron表达式</a></div>
     </div>
     <button type="submit" class="btn btn-success">添加任务</button>
 </form>
