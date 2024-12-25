@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DemoTableController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.controller</a> &gt; <span class="el_source">DemoTableController.java</span></div><h1>DemoTableController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.controller;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.annotation.Excel.ColumnType;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+
+/**
+ * 表格相关
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/demo/table&quot;)
+<span class="nc" id="L35">public class DemoTableController extends BaseController</span>
+{
+<span class="nc" id="L37">    private String prefix = &quot;demo/table&quot;;</span>
+
+<span class="nc" id="L39">    private final static List&lt;UserTableModel&gt; users = new ArrayList&lt;UserTableModel&gt;();</span>
+    {
+<span class="nc" id="L41">        users.add(new UserTableModel(1, &quot;1000001&quot;, &quot;测试1&quot;, &quot;0&quot;, &quot;15888888888&quot;, &quot;ry@qq.com&quot;, 150.0, &quot;0&quot;));</span>
+<span class="nc" id="L42">        users.add(new UserTableModel(2, &quot;1000002&quot;, &quot;测试2&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 180.0, &quot;1&quot;));</span>
+<span class="nc" id="L43">        users.add(new UserTableModel(3, &quot;1000003&quot;, &quot;测试3&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 110.0, &quot;1&quot;));</span>
+<span class="nc" id="L44">        users.add(new UserTableModel(4, &quot;1000004&quot;, &quot;测试4&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 220.0, &quot;1&quot;));</span>
+<span class="nc" id="L45">        users.add(new UserTableModel(5, &quot;1000005&quot;, &quot;测试5&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 140.0, &quot;1&quot;));</span>
+<span class="nc" id="L46">        users.add(new UserTableModel(6, &quot;1000006&quot;, &quot;测试6&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 330.0, &quot;1&quot;));</span>
+<span class="nc" id="L47">        users.add(new UserTableModel(7, &quot;1000007&quot;, &quot;测试7&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 160.0, &quot;1&quot;));</span>
+<span class="nc" id="L48">        users.add(new UserTableModel(8, &quot;1000008&quot;, &quot;测试8&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 170.0, &quot;1&quot;));</span>
+<span class="nc" id="L49">        users.add(new UserTableModel(9, &quot;1000009&quot;, &quot;测试9&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 180.0, &quot;1&quot;));</span>
+<span class="nc" id="L50">        users.add(new UserTableModel(10, &quot;1000010&quot;, &quot;测试10&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 210.0, &quot;1&quot;));</span>
+<span class="nc" id="L51">        users.add(new UserTableModel(11, &quot;1000011&quot;, &quot;测试11&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 110.0, &quot;1&quot;));</span>
+<span class="nc" id="L52">        users.add(new UserTableModel(12, &quot;1000012&quot;, &quot;测试12&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 120.0, &quot;1&quot;));</span>
+<span class="nc" id="L53">        users.add(new UserTableModel(13, &quot;1000013&quot;, &quot;测试13&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 380.0, &quot;1&quot;));</span>
+<span class="nc" id="L54">        users.add(new UserTableModel(14, &quot;1000014&quot;, &quot;测试14&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 280.0, &quot;1&quot;));</span>
+<span class="nc" id="L55">        users.add(new UserTableModel(15, &quot;1000015&quot;, &quot;测试15&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 570.0, &quot;1&quot;));</span>
+<span class="nc" id="L56">        users.add(new UserTableModel(16, &quot;1000016&quot;, &quot;测试16&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 260.0, &quot;1&quot;));</span>
+<span class="nc" id="L57">        users.add(new UserTableModel(17, &quot;1000017&quot;, &quot;测试17&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 210.0, &quot;1&quot;));</span>
+<span class="nc" id="L58">        users.add(new UserTableModel(18, &quot;1000018&quot;, &quot;测试18&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 340.0, &quot;1&quot;));</span>
+<span class="nc" id="L59">        users.add(new UserTableModel(19, &quot;1000019&quot;, &quot;测试19&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 160.0, &quot;1&quot;));</span>
+<span class="nc" id="L60">        users.add(new UserTableModel(20, &quot;1000020&quot;, &quot;测试20&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 220.0, &quot;1&quot;));</span>
+<span class="nc" id="L61">        users.add(new UserTableModel(21, &quot;1000021&quot;, &quot;测试21&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 120.0, &quot;1&quot;));</span>
+<span class="nc" id="L62">        users.add(new UserTableModel(22, &quot;1000022&quot;, &quot;测试22&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 130.0, &quot;1&quot;));</span>
+<span class="nc" id="L63">        users.add(new UserTableModel(23, &quot;1000023&quot;, &quot;测试23&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 490.0, &quot;1&quot;));</span>
+<span class="nc" id="L64">        users.add(new UserTableModel(24, &quot;1000024&quot;, &quot;测试24&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 570.0, &quot;1&quot;));</span>
+<span class="nc" id="L65">        users.add(new UserTableModel(25, &quot;1000025&quot;, &quot;测试25&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 250.0, &quot;1&quot;));</span>
+<span class="nc" id="L66">        users.add(new UserTableModel(26, &quot;1000026&quot;, &quot;测试26&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 250.0, &quot;1&quot;));</span>
+    }
+
+<span class="nc" id="L69">    private final static List&lt;AreaModel&gt; areas = new ArrayList&lt;AreaModel&gt;();</span>
+    {
+<span class="nc" id="L71">        areas.add(new AreaModel(1, 0, &quot;广东省&quot;, &quot;440000&quot;, &quot;GDS&quot;, &quot;GuangDongSheng&quot;, 1));</span>
+<span class="nc" id="L72">        areas.add(new AreaModel(2, 0, &quot;湖南省&quot;, &quot;430000&quot;, &quot;HNS&quot;, &quot;HuNanSheng&quot;, 1));</span>
+<span class="nc" id="L73">        areas.add(new AreaModel(3, 0, &quot;河南省&quot;, &quot;410000&quot;, &quot;HNS&quot;, &quot;HeNanSheng&quot;, 0));</span>
+<span class="nc" id="L74">        areas.add(new AreaModel(4, 0, &quot;湖北省&quot;, &quot;420000&quot;, &quot;HBS&quot;, &quot;HuBeiSheng&quot;, 0));</span>
+<span class="nc" id="L75">        areas.add(new AreaModel(5, 0, &quot;辽宁省&quot;, &quot;210000&quot;, &quot;LNS&quot;, &quot;LiaoNingSheng&quot;, 0));</span>
+<span class="nc" id="L76">        areas.add(new AreaModel(6, 0, &quot;山东省&quot;, &quot;370000&quot;, &quot;SDS&quot;, &quot;ShanDongSheng&quot;, 0));</span>
+<span class="nc" id="L77">        areas.add(new AreaModel(7, 0, &quot;陕西省&quot;, &quot;610000&quot;, &quot;SXS&quot;, &quot;ShanXiSheng&quot;, 0));</span>
+<span class="nc" id="L78">        areas.add(new AreaModel(8, 0, &quot;贵州省&quot;, &quot;520000&quot;, &quot;GZS&quot;, &quot;GuiZhouSheng&quot;, 0));</span>
+<span class="nc" id="L79">        areas.add(new AreaModel(9,  0, &quot;上海市&quot;, &quot;310000&quot;, &quot;SHS&quot;, &quot;ShangHaiShi&quot;, 0));</span>
+<span class="nc" id="L80">        areas.add(new AreaModel(10, 0, &quot;重庆市&quot;, &quot;500000&quot;, &quot;CQS&quot;, &quot;ChongQingShi&quot;, 0));</span>
+<span class="nc" id="L81">        areas.add(new AreaModel(11, 0, &quot;若依省&quot;, &quot;666666&quot;, &quot;YYS&quot;, &quot;RuoYiSheng&quot;, 0));</span>
+<span class="nc" id="L82">        areas.add(new AreaModel(12, 0, &quot;安徽省&quot;, &quot;340000&quot;, &quot;AHS&quot;, &quot;AnHuiSheng&quot;, 0));</span>
+<span class="nc" id="L83">        areas.add(new AreaModel(13, 0, &quot;福建省&quot;, &quot;350000&quot;, &quot;FJS&quot;, &quot;FuJianSheng&quot;, 0));</span>
+<span class="nc" id="L84">        areas.add(new AreaModel(14, 0, &quot;海南省&quot;, &quot;460000&quot;, &quot;HNS&quot;, &quot;HaiNanSheng&quot;, 0));</span>
+<span class="nc" id="L85">        areas.add(new AreaModel(15, 0, &quot;江苏省&quot;, &quot;320000&quot;, &quot;JSS&quot;, &quot;JiangSuSheng&quot;, 0));</span>
+<span class="nc" id="L86">        areas.add(new AreaModel(16, 0, &quot;青海省&quot;, &quot;630000&quot;, &quot;QHS&quot;, &quot;QingHaiSheng&quot;, 0));</span>
+<span class="nc" id="L87">        areas.add(new AreaModel(17, 0, &quot;广西壮族自治区&quot;, &quot;450000&quot;, &quot;GXZZZZQ&quot;, &quot;GuangXiZhuangZuZiZhiQu&quot;, 0));</span>
+<span class="nc" id="L88">        areas.add(new AreaModel(18, 0, &quot;宁夏回族自治区&quot;, &quot;640000&quot;, &quot;NXHZZZQ&quot;, &quot;NingXiaHuiZuZiZhiQu&quot;, 0));</span>
+<span class="nc" id="L89">        areas.add(new AreaModel(19, 0, &quot;内蒙古自治区&quot;, &quot;150000&quot;, &quot;NMGZZQ&quot;, &quot;NeiMengGuZiZhiQu&quot;, 0));</span>
+<span class="nc" id="L90">        areas.add(new AreaModel(20, 0, &quot;新疆维吾尔自治区&quot;, &quot;650000&quot;, &quot;XJWWEZZQ&quot;, &quot;XinJiangWeiWuErZiZhiQu&quot;, 0));</span>
+<span class="nc" id="L91">        areas.add(new AreaModel(21, 0, &quot;江西省&quot;, &quot;360000&quot;, &quot;JXS&quot;, &quot;JiangXiSheng&quot;, 0));</span>
+<span class="nc" id="L92">        areas.add(new AreaModel(22, 0, &quot;浙江省&quot;, &quot;330000&quot;, &quot;ZJS&quot;, &quot;ZheJiangSheng&quot;, 0));</span>
+<span class="nc" id="L93">        areas.add(new AreaModel(23, 0, &quot;河北省&quot;, &quot;130000&quot;, &quot;HBS&quot;, &quot;HeBeiSheng&quot;, 0));</span>
+<span class="nc" id="L94">        areas.add(new AreaModel(24, 0, &quot;天津市&quot;, &quot;120000&quot;, &quot;TJS&quot;, &quot;TianJinShi&quot;, 0));</span>
+<span class="nc" id="L95">        areas.add(new AreaModel(25, 0, &quot;山西省&quot;, &quot;140000&quot;, &quot;SXS&quot;, &quot;ShanXiSheng&quot;, 0));</span>
+<span class="nc" id="L96">        areas.add(new AreaModel(26, 0, &quot;台湾省&quot;, &quot;710000&quot;, &quot;TWS&quot;, &quot;TaiWanSheng&quot;, 0));</span>
+<span class="nc" id="L97">        areas.add(new AreaModel(27, 0, &quot;甘肃省&quot;, &quot;620000&quot;, &quot;GSS&quot;, &quot;GanSuSheng&quot;, 0));</span>
+<span class="nc" id="L98">        areas.add(new AreaModel(28, 0, &quot;四川省&quot;, &quot;510000&quot;, &quot;SCS&quot;, &quot;SiChuanSheng&quot;, 0));</span>
+<span class="nc" id="L99">        areas.add(new AreaModel(29, 0, &quot;云南省&quot;, &quot;530000&quot;, &quot;YNS&quot;, &quot;YunNanSheng&quot;, 0));</span>
+<span class="nc" id="L100">        areas.add(new AreaModel(30, 0, &quot;北京市&quot;, &quot;110000&quot;, &quot;BJS&quot;, &quot;BeiJingShi&quot;, 0));</span>
+<span class="nc" id="L101">        areas.add(new AreaModel(31, 0, &quot;香港特别行政区&quot;, &quot;810000&quot;, &quot;XGTBXZQ&quot;, &quot;XiangGangTeBieXingZhengQu&quot;, 0));</span>
+<span class="nc" id="L102">        areas.add(new AreaModel(32, 0, &quot;澳门特别行政区&quot;, &quot;820000&quot;, &quot;AMTBXZQ&quot;, &quot;AoMenTeBieXingZhengQu&quot;, 0));</span>
+        
+<span class="nc" id="L104">        areas.add(new AreaModel(100, 1, &quot;深圳市&quot;, &quot;440300&quot;, &quot;SZS&quot;, &quot;ShenZhenShi&quot;, 1));</span>
+<span class="nc" id="L105">        areas.add(new AreaModel(101, 1, &quot;广州市&quot;, &quot;440100&quot;, &quot;GZS&quot;, &quot;GuangZhouShi&quot;, 0));</span>
+<span class="nc" id="L106">        areas.add(new AreaModel(102, 1, &quot;东莞市&quot;, &quot;441900&quot;, &quot;DGS&quot;, &quot;DongGuanShi&quot;, 0));</span>
+<span class="nc" id="L107">        areas.add(new AreaModel(103, 2, &quot;长沙市&quot;, &quot;410005&quot;, &quot;CSS&quot;, &quot;ChangShaShi&quot;, 1));</span>
+<span class="nc" id="L108">        areas.add(new AreaModel(104, 2, &quot;岳阳市&quot;, &quot;414000&quot;, &quot;YYS&quot;, &quot;YueYangShi&quot;, 0));</span>
+        
+<span class="nc" id="L110">        areas.add(new AreaModel(1000, 100, &quot;龙岗区&quot;, &quot;518172&quot;, &quot;LGQ&quot;, &quot;LongGangQu&quot;, 0));</span>
+<span class="nc" id="L111">        areas.add(new AreaModel(1001, 100, &quot;南山区&quot;, &quot;518051&quot;, &quot;NSQ&quot;, &quot;NanShanQu&quot;, 0));</span>
+<span class="nc" id="L112">        areas.add(new AreaModel(1002, 100, &quot;宝安区&quot;, &quot;518101&quot;, &quot;BAQ&quot;, &quot;BaoAnQu&quot;, 0));</span>
+<span class="nc" id="L113">        areas.add(new AreaModel(1003, 100, &quot;福田区&quot;, &quot;518081&quot;, &quot;FTQ&quot;, &quot;FuTianQu&quot;, 0));</span>
+<span class="nc" id="L114">        areas.add(new AreaModel(1004, 103, &quot;天心区&quot;, &quot;410004&quot;, &quot;TXQ&quot;, &quot;TianXinQu&quot;, 0));</span>
+<span class="nc" id="L115">        areas.add(new AreaModel(1005, 103, &quot;开福区&quot;, &quot;410008&quot;, &quot;KFQ&quot;, &quot;KaiFuQu&quot;, 0));</span>
+<span class="nc" id="L116">        areas.add(new AreaModel(1006, 103, &quot;芙蓉区&quot;, &quot;410011&quot;, &quot;FRQ&quot;, &quot;FuRongQu&quot;, 0));</span>
+<span class="nc" id="L117">        areas.add(new AreaModel(1007, 103, &quot;雨花区&quot;, &quot;410011&quot;, &quot;YHQ&quot;, &quot;YuHuaQu&quot;, 0));</span>
+    }
+
+<span class="nc" id="L120">    private final static List&lt;UserTableColumn&gt; columns = new ArrayList&lt;UserTableColumn&gt;();</span>
+    {
+<span class="nc" id="L122">        columns.add(new UserTableColumn(&quot;用户ID&quot;, &quot;userId&quot;));</span>
+<span class="nc" id="L123">        columns.add(new UserTableColumn(&quot;用户编号&quot;, &quot;userCode&quot;));</span>
+<span class="nc" id="L124">        columns.add(new UserTableColumn(&quot;用户姓名&quot;, &quot;userName&quot;));</span>
+<span class="nc" id="L125">        columns.add(new UserTableColumn(&quot;用户手机&quot;, &quot;userPhone&quot;));</span>
+<span class="nc" id="L126">        columns.add(new UserTableColumn(&quot;用户邮箱&quot;, &quot;userEmail&quot;));</span>
+<span class="nc" id="L127">        columns.add(new UserTableColumn(&quot;用户状态&quot;, &quot;status&quot;));</span>
+    }
+    
+<span class="nc" id="L130">    private final static List&lt;DocumentModel&gt; documents = new ArrayList&lt;DocumentModel&gt;();</span>
+    {
+<span class="nc" id="L132">        documents.add(new DocumentModel(1, &quot;247-XW·2024-D10-0001&quot;, &quot;新闻热线[2024]000001&quot;, &quot;索尼射击游戏《Concord》停止运营，玩家将获全额退款&quot;, &quot;索尼宣布多人射击游戏《Concord》将于9月6日停止运营，玩家将获得全额退款。游戏总监Ryan Ellis在给玩家的信中表示，这款游戏首次发布“并没有像我们预期的那样顺利”。《Concord》的开发历时8年，投资超过1.5亿美元。游戏在Steam平台的售价为40美元，采用买断制销售模式。据SteamDB统计，游戏上市后的最高同时在线人数为697人。&quot;));</span>
+<span class="nc" id="L133">        documents.add(new DocumentModel(2, &quot;247-XW·2024-D30-0002&quot;, &quot;新闻热线[2024]000002&quot;, &quot;网红账号被封，央媒：如此炫富毒瘤早就该拔了&quot;, &quot;在社交平台上分享自己的生活日常，本来无可厚非。但无底线地展示物欲、宣扬拜金，取笑甚至嘲讽工薪者的烟火生活，就会遮蔽普通人的平凡质朴和坚韧奋斗，在无形中消解芸芸众生脚踏实地、自立自强的社会正气。对这种助长金钱至上、刺激公众焦虑，既污染网络生态，又撕裂社会和谐的炫富“毒瘤”，必须坚决拔除之。在国家有关部门的部署下，近日，多个网络平台开展“不良价值导向内容专项治理”行动，对“奢靡浪费”“炫富拜金”等问题从严打击，倡导理性、文明的消费观和价值观。&quot;));</span>
+<span class="nc" id="L134">        documents.add(new DocumentModel(3, &quot;CT01-XW·2024-Y-0003&quot;, &quot;新闻热线[2024]000003&quot;, &quot;重庆一夫妻被骗至缅甸，家属：两人已被解救，预计很快能回国&quot;, &quot;5月25日，重庆一对夫妻在前往泰国后失联，疑被诈骗集团骗至缅甸的消息引发广泛关注。警方已对此事立案调查，而这对夫妻的亲属则每天生活在焦急和不安之中。亲属：家都瘫痪了，事情一经曝光，迅速登上了热搜，成为公众热议的话题。据了解，这对夫妻原计划是去泰国谈生意，但不幸的是，他们的泰国之行变成了一场噩梦。亲属李先生透露，4月14日，他们夫妻二人抵达泰国，不久后便疑似被人以10万元的价格卖到缅甸，目前被困在缅甸妙瓦底的一个电信诈骗园区。&quot;));</span>
+<span class="nc" id="L135">        documents.add(new DocumentModel(4, &quot;CT01-XW·2024-Y-0004&quot;, &quot;新闻热线[2024]000004&quot;, &quot;江滨社区联合派出所、金霞消防站开展电动自行车安全隐患夜查活动&quot;, &quot;近日，长沙市开福区江滨社区联合派出所、金霞消防站深入居民小区、单位场所，以电动车自行车火灾防范为重点，开展消防安全夜查行动。此次夜查紧紧围绕老旧居民区、“三合一”场所、沿街门店、夜间经营使用场所等场所开展监督检查，重点检查电动自行车违规停放充电、堵塞疏散通道和安全出口，架空层违规作为电动自行车停放充电场所，电动自行车违规“进楼入户”“飞线充电”，电动自行车擅自改装等五大类问题。&quot;));</span>
+<span class="nc" id="L136">        documents.add(new DocumentModel(5, &quot;CT01-XW·2024-Y-0005&quot;, &quot;新闻热线[2024]000005&quot;, &quot;《黑神话》让海外玩家迷上“悟空”&quot;, &quot;备受全球玩家瞩目的首款国产3A游戏《黑神话：悟空》日前正式发布。精美绝伦的东方美学世界、精彩纷呈的中国神话故事、酣畅淋漓的游戏体验，这款游戏为全球玩家带来一场视觉与文化的双重盛宴。从“悟空”成功出海的背后，海外人士看到了中国游戏产业的巨大进步，感受到了中国文化的多元精彩，并对下一个“悟空”的诞生及更多中国文化产品走向世界充满期待。&quot;));</span>
+<span class="nc" id="L137">        documents.add(new DocumentModel(6, &quot;CT01-XW·2024-Y-0006&quot;, &quot;新闻热线[2024]000006&quot;, &quot;市场状况充满挑战！极星宣布裁员全球约15%的员工&quot;, &quot;据路透社报道，极星周五以“充满挑战的市场状况”为由，宣布计划在全球范围内裁减约450个职位。此次裁员之际，许多人都对电动汽车需求降温表示担忧，而且极星预计汽车业务最早将在2025年开始实现收支平衡。极星发言人表示：“作为该商业计划的一部分，我们需要调整我们的业务和运营规模。” “这涉及减少外部支出，遗憾的是，还包括我们的员工数量。”该公司还表示，希望减少对沃尔沃及其母公司吉利外部融资的依赖，最近还表示希望削减成本并提高电动汽车的利润率。&quot;));</span>
+<span class="nc" id="L138">        documents.add(new DocumentModel(7, &quot;CT01-XW·2024-Y-0007&quot;, &quot;新闻热线[2024]000007&quot;, &quot;浙江隐秘富豪涉百亿非法集资案，部分资金流入新造车公司&quot;, &quot;5月10日、11日，上海北广投资管理有限公司（下称“北广投”）非法集资案在上海黄浦区人民法院一审公开开庭审理，北广投实控人周敏、法定代表人朱江等30余名中高管被控非法吸收公众存款罪。根据财新报道，这一案件中，非法集资的资金有部分流入了两家新能源车企——爱驰汽车、万象汽车。同时，有多位投资人引述与经侦部门沟通时的说法称，该案事发时未兑付金额有130余亿元，其中去往广微控股45亿元、万象汽车63亿元、爱驰汽车15亿元。&quot;));</span>
+<span class="nc" id="L139">        documents.add(new DocumentModel(8, &quot;CT01-XW·2024-Y-0008&quot;, &quot;新闻热线[2024]000008&quot;, &quot;特斯拉宣布Model Y升级：搭载HW4.0硬件，售价仍25.89万元起&quot;, &quot;2月1日，特斯拉官方宣布ModelY升级。外观上，新增ModelY专属色“快银车漆”，并采用烈焰红代替中国红、星空灰代替冷光银；性能上，ModelY全系配备全新一代自动辅助驾驶硬件(HW4.0)，通过搭载超远距离双目摄像头，ModelY的最远探测距离达424米。由此，特斯拉全系车型均配备了自动辅助驾驶硬件HW4.0。在售价方面，特斯拉中国官网显示，ModelY车型依然保持原价。ModelY后轮驱动版25.89万元起、ModelY长续航版29.99万元起、ModelY高性能版售价36.39万元起。&quot;));</span>
+<span class="nc" id="L140">        documents.add(new DocumentModel(9, &quot;CT01-XW·2024-D10-0009&quot;, &quot;新闻热线[2024]000009&quot;, &quot;华为手机归来，谁最受伤？&quot;, &quot;低迷周期下的智能手机市场在2023年下半年迎来了华为的回归，这也给本就竞争激烈的市场环境带来了更大变数。1月29日，有消息称，华为已注册“星耀手机”品牌商标，定位中端手机市场，但上述消息并未获得华为方面确认。“目前星耀的相关信息我们看到了，但是没有获得产品信息以及启动线下铺货的通知。对于和其他品牌的二选一问题，听其他省份的经销商说过，但目前（华为渠道）这边也没有更多动作。”一位广东区域的华为核心经销商对记者说。但华为手机的反扑已经开始。在多家调研机构公布的2023年四季度智能手机出货数据中，华为手机的量正在明显上升，当季增幅在35%到47%之间。不过，从全年数据来看，并未登上前五榜单。&quot;));</span>
+<span class="nc" id="L141">        documents.add(new DocumentModel(10, &quot;CT01-XW·2024-D10-0010&quot;, &quot;新闻热线[2024]000010&quot;, &quot;疯狂裁员的硅谷大厂：除了AI，其它都是将就&quot;, &quot;放眼望去，近期科技企业财报形势一片大好，裁员浪潮却仍在不断蔓延。国内职场动态看脉脉，那硅谷裁员情况就得看layoff.fyi了。数据显示，2024年，103家科技企业进行了裁员，28963位员工失去了饭碗。其中，电子支付公司PayPal大笔一挥，裁掉2500人，微软则在开年就裁掉1900人。回望2023年，谷歌、Meta、亚马逊、微软均为裁员重灾区，裁员人数在一万左右。具体而言，谷歌近日披露的财报指出，2023年谷歌解雇了12000多名员工，光是在遣散费和其他费用上就花费了21亿美元。而且裁员费用还在不断增加，2024年刚过去一个月，谷歌就已经花费了7亿美元用来裁员。&quot;));</span>
+<span class="nc" id="L142">        documents.add(new DocumentModel(11, &quot;CT01-XW·2024-D30-0011&quot;, &quot;新闻热线[2024]000011&quot;, &quot;国产手机品牌重新崛起背后：市场正在逐步恢复活力，竞争也愈发激烈&quot;, &quot;2024年伊始，随着全球经济的逐渐复苏，手机消费市场也展现出勃勃生机。中国信通院最新数据显示，2023年中国市场手机出货量实现了6.5%的同比增长，其中5G手机增长势头更为强劲，占比高达82.8%。1月25日，国际数据公司（IDC）发布了最新手机季度跟踪报告，揭示了中国智能手机市场在2023年第四季度的出货量情况。报告显示，该季度中国智能手机市场出货量达到了约7363万台，同比增长1.2%。这是在连续十个季度同比下降后，中国智能手机市场首次实现反弹。这一积极信号表明，市场正在逐步恢复活力，各大品牌之间的竞争也愈发激烈。&quot;));</span>
+<span class="nc" id="L143">        documents.add(new DocumentModel(12, &quot;CT01-XW·2024-D30-0012&quot;, &quot;新闻热线[2024]000012&quot;, &quot;SpaceX将于1月31日向国际空间站发射天鹅号货运飞船&quot;, &quot;1月29日消息，美国太空探索技术公司SpaceX计划于当地时间1月30日，利用“猎鹰9号”火箭从佛罗里达州肯尼迪航天中心发射诺斯罗普·格鲁曼公司的“天鹅号”货运飞船至国际空间站。此次任务是执行NG-20商业补给，将运送约8200多磅的物资、设备及科学实验器材。&quot;));</span>
+<span class="nc" id="L144">    }</span>
+
+    /**
+     * 搜索相关
+     */
+    @GetMapping(&quot;/search&quot;)
+    public String search()
+    {
+<span class="nc" id="L152">        return prefix + &quot;/search&quot;;</span>
+    }
+
+    /**
+     * 数据汇总
+     */
+    @GetMapping(&quot;/footer&quot;)
+    public String footer()
+    {
+<span class="nc" id="L161">        return prefix + &quot;/footer&quot;;</span>
+    }
+
+    /**
+     * 组合表头
+     */
+    @GetMapping(&quot;/groupHeader&quot;)
+    public String groupHeader()
+    {
+<span class="nc" id="L170">        return prefix + &quot;/groupHeader&quot;;</span>
+    }
+
+    /**
+     * 表格导出
+     */
+    @GetMapping(&quot;/export&quot;)
+    public String export()
+    {
+<span class="nc" id="L179">        return prefix + &quot;/export&quot;;</span>
+    }
+
+    /**
+     * 表格导出选择列
+     */
+    @GetMapping(&quot;/exportSelected&quot;)
+    public String exportSelected()
+    {
+<span class="nc" id="L188">        return prefix + &quot;/exportSelected&quot;;</span>
+    }
+
+    /**
+     * 导出数据
+     */
+    @PostMapping(&quot;/exportData&quot;)
+    @ResponseBody
+    public AjaxResult exportSelected(UserTableModel userModel, String userIds)
+    {
+<span class="nc" id="L198">        List&lt;UserTableModel&gt; userList = new ArrayList&lt;UserTableModel&gt;(Arrays.asList(new UserTableModel[users.size()]));</span>
+<span class="nc" id="L199">        Collections.copy(userList, users);</span>
+
+        // 条件过滤
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(userIds))</span>
+        {
+<span class="nc" id="L204">            userList.clear();</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">            for (Long userId : Convert.toLongArray(userIds))</span>
+            {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                for (UserTableModel user : users)</span>
+                {
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                    if (user.getUserId() == userId)</span>
+                    {
+<span class="nc" id="L211">                        userList.add(user);</span>
+                    }
+<span class="nc" id="L213">                }</span>
+            }
+        }
+<span class="nc" id="L216">        ExcelUtil&lt;UserTableModel&gt; util = new ExcelUtil&lt;UserTableModel&gt;(UserTableModel.class);</span>
+<span class="nc" id="L217">        return util.exportExcel(userList, &quot;用户数据&quot;);</span>
+    }
+
+    /**
+     * 翻页记住选择
+     */
+    @GetMapping(&quot;/remember&quot;)
+    public String remember()
+    {
+<span class="nc" id="L226">        return prefix + &quot;/remember&quot;;</span>
+    }
+
+    /**
+     * 表格保存状态
+     */
+    @GetMapping(&quot;/cookie&quot;)
+    public String cookie()
+    {
+<span class="nc" id="L235">        return prefix + &quot;/cookie&quot;;</span>
+    }
+
+    /**
+     * 跳转至指定页
+     */
+    @GetMapping(&quot;/pageGo&quot;)
+    public String pageGo()
+    {
+<span class="nc" id="L244">        return prefix + &quot;/pageGo&quot;;</span>
+    }
+
+    /**
+     * 自定义查询参数
+     */
+    @GetMapping(&quot;/params&quot;)
+    public String params()
+    {
+<span class="nc" id="L253">        return prefix + &quot;/params&quot;;</span>
+    }
+
+    /**
+     * 多表格
+     */
+    @GetMapping(&quot;/multi&quot;)
+    public String multi()
+    {
+<span class="nc" id="L262">        return prefix + &quot;/multi&quot;;</span>
+    }
+
+    /**
+     * 点击按钮加载表格
+     */
+    @GetMapping(&quot;/button&quot;)
+    public String button()
+    {
+<span class="nc" id="L271">        return prefix + &quot;/button&quot;;</span>
+    }
+
+    /**
+     * 直接加载表格数据
+     */
+    @GetMapping(&quot;/data&quot;)
+    public String data(ModelMap mmap)
+    {
+<span class="nc" id="L280">        mmap.put(&quot;users&quot;, users);</span>
+<span class="nc" id="L281">        return prefix + &quot;/data&quot;;</span>
+    }
+
+    /**
+     * 表格冻结列
+     */
+    @GetMapping(&quot;/fixedColumns&quot;)
+    public String fixedColumns()
+    {
+<span class="nc" id="L290">        return prefix + &quot;/fixedColumns&quot;;</span>
+    }
+
+    /**
+     * 自定义触发事件
+     */
+    @GetMapping(&quot;/event&quot;)
+    public String event()
+    {
+<span class="nc" id="L299">        return prefix + &quot;/event&quot;;</span>
+    }
+
+    /**
+     * 表格细节视图
+     */
+    @GetMapping(&quot;/detail&quot;)
+    public String detail()
+    {
+<span class="nc" id="L308">        return prefix + &quot;/detail&quot;;</span>
+    }
+
+    /**
+     * 表格父子视图
+     */
+    @GetMapping(&quot;/child&quot;)
+    public String child()
+    {
+<span class="nc" id="L317">        return prefix + &quot;/child&quot;;</span>
+    }
+
+    /**
+     * 表格图片预览
+     */
+    @GetMapping(&quot;/image&quot;)
+    public String image()
+    {
+<span class="nc" id="L326">        return prefix + &quot;/image&quot;;</span>
+    }
+
+    /**
+     * 动态增删改查
+     */
+    @GetMapping(&quot;/curd&quot;)
+    public String curd()
+    {
+<span class="nc" id="L335">        return prefix + &quot;/curd&quot;;</span>
+    }
+
+    /**
+     * 表格行拖拽操作
+     */
+    @GetMapping(&quot;/reorderRows&quot;)
+    public String reorderRows()
+    {
+<span class="nc" id="L344">        return prefix + &quot;/reorderRows&quot;;</span>
+    }
+
+    /**
+     * 表格列拖拽操作
+     */
+    @GetMapping(&quot;/reorderColumns&quot;)
+    public String reorderColumns()
+    {
+<span class="nc" id="L353">        return prefix + &quot;/reorderColumns&quot;;</span>
+    }
+
+    /**
+     * 表格列宽拖动
+     */
+    @GetMapping(&quot;/resizable&quot;)
+    public String resizable()
+    {
+<span class="nc" id="L362">        return prefix + &quot;/resizable&quot;;</span>
+    }
+
+    /**
+     * 表格行内编辑操作
+     */
+    @GetMapping(&quot;/editable&quot;)
+    public String editable()
+    {
+<span class="nc" id="L371">        return prefix + &quot;/editable&quot;;</span>
+    }
+
+    /**
+     * 主子表提交
+     */
+    @GetMapping(&quot;/subdata&quot;)
+    public String subdata()
+    {
+<span class="nc" id="L380">        return prefix + &quot;/subdata&quot;;</span>
+    }
+
+    /**
+     * 表格自动刷新
+     */
+    @GetMapping(&quot;/refresh&quot;)
+    public String refresh()
+    {
+<span class="nc" id="L389">        return prefix + &quot;/refresh&quot;;</span>
+    }
+
+    /**
+     * 表格打印配置
+     */
+    @GetMapping(&quot;/print&quot;)
+    public String print()
+    {
+<span class="nc" id="L398">        return prefix + &quot;/print&quot;;</span>
+    }
+
+    /**
+     * 表格标题格式化
+     */
+    @GetMapping(&quot;/headerStyle&quot;)
+    public String headerStyle()
+    {
+<span class="nc" id="L407">        return prefix + &quot;/headerStyle&quot;;</span>
+    }
+
+    /**
+     * 表格动态列
+     */
+    @GetMapping(&quot;/dynamicColumns&quot;)
+    public String dynamicColumns()
+    {
+<span class="nc" id="L416">        return prefix + &quot;/dynamicColumns&quot;;</span>
+    }
+
+    /**
+     * 表格虚拟滚动
+     */
+    @GetMapping(&quot;/virtualScroll&quot;)
+    public String virtualScroll()
+    {
+<span class="nc" id="L425">        return prefix + &quot;/virtualScroll&quot;;</span>
+    }
+
+    /**
+     * 自定义视图分页
+     */
+    @GetMapping(&quot;/customView&quot;)
+    public String customView()
+    {
+<span class="nc" id="L434">        return prefix + &quot;/customView&quot;;</span>
+    }
+
+    /**
+     * 全文索引
+     */
+    @GetMapping(&quot;/textSearch&quot;)
+    public String textSearch()
+    {
+<span class="nc" id="L443">        return prefix + &quot;/textSearch&quot;;</span>
+    }
+
+    /**
+     * 异步加载表格树
+     */
+    @GetMapping(&quot;/asynTree&quot;)
+    public String asynTree()
+    {
+<span class="nc" id="L452">        return prefix + &quot;/asynTree&quot;;</span>
+    }
+
+    /**
+     * 表格其他操作
+     */
+    @GetMapping(&quot;/other&quot;)
+    public String other()
+    {
+<span class="nc" id="L461">        return prefix + &quot;/other&quot;;</span>
+    }
+
+    /**
+     * 动态获取列
+     */
+    @PostMapping(&quot;/ajaxColumns&quot;)
+    @ResponseBody
+    public AjaxResult ajaxColumns(UserTableColumn userColumn)
+    {
+<span class="nc" id="L471">        List&lt;UserTableColumn&gt; columnList = new ArrayList&lt;UserTableColumn&gt;(Arrays.asList(new UserTableColumn[columns.size()]));</span>
+<span class="nc" id="L472">        Collections.copy(columnList, columns);</span>
+<span class="nc bnc" id="L473" title="All 4 branches missed.">        if (userColumn != null &amp;&amp; &quot;userBalance&quot;.equals(userColumn.getField()))</span>
+        {
+<span class="nc" id="L475">            columnList.add(new UserTableColumn(&quot;用户余额&quot;, &quot;userBalance&quot;));</span>
+        }
+<span class="nc" id="L477">        return AjaxResult.success(columnList);</span>
+    }
+
+    /**
+     * 查询数据
+     */
+    @PostMapping(&quot;/list&quot;)
+    @ResponseBody
+    public TableDataInfo list(UserTableModel userModel)
+    {
+<span class="nc" id="L487">        TableDataInfo rspData = new TableDataInfo();</span>
+<span class="nc" id="L488">        List&lt;UserTableModel&gt; userList = new ArrayList&lt;UserTableModel&gt;(Arrays.asList(new UserTableModel[users.size()]));</span>
+<span class="nc" id="L489">        Collections.copy(userList, users);</span>
+        // 查询条件过滤
+<span class="nc bnc" id="L491" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(userModel.getUserName()))</span>
+        {
+<span class="nc" id="L493">            userList.clear();</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">            for (UserTableModel user : users)</span>
+            {
+<span class="nc bnc" id="L496" title="All 2 branches missed.">                if (user.getUserName().equals(userModel.getUserName()))</span>
+                {
+<span class="nc" id="L498">                    userList.add(user);</span>
+                }
+<span class="nc" id="L500">            }</span>
+        }
+<span class="nc" id="L502">        PageDomain pageDomain = TableSupport.buildPageRequest();</span>
+<span class="nc bnc" id="L503" title="All 4 branches missed.">        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize())</span>
+        {
+<span class="nc" id="L505">            rspData.setRows(userList);</span>
+<span class="nc" id="L506">            rspData.setTotal(userList.size());</span>
+<span class="nc" id="L507">            return rspData;</span>
+        }
+<span class="nc" id="L509">        Integer pageNum = (pageDomain.getPageNum() - 1) * 10;</span>
+<span class="nc" id="L510">        Integer pageSize = pageDomain.getPageNum() * 10;</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">        if (pageSize &gt; userList.size())</span>
+        {
+<span class="nc" id="L513">            pageSize = userList.size();</span>
+        }
+<span class="nc" id="L515">        rspData.setRows(userList.subList(pageNum, pageSize));</span>
+<span class="nc" id="L516">        rspData.setTotal(userList.size());</span>
+<span class="nc" id="L517">        return rspData;</span>
+    }
+
+    /**
+     * 查询全文索引数据
+     */
+    @PostMapping(&quot;/text/list&quot;)
+    @ResponseBody
+    public TableDataInfo textList(BaseEntity baseEntity)
+    {
+<span class="nc" id="L527">        TableDataInfo rspData = new TableDataInfo();</span>
+<span class="nc" id="L528">        List&lt;DocumentModel&gt; documentList = new ArrayList&lt;DocumentModel&gt;(Arrays.asList(new DocumentModel[documents.size()]));</span>
+<span class="nc" id="L529">        Collections.copy(documentList, documents);</span>
+        // 查询条件过滤
+<span class="nc bnc" id="L531" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(baseEntity.getSearchValue()))</span>
+        {
+<span class="nc" id="L533">            documentList.clear();</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">            for (DocumentModel document : documents)</span>
+            {
+<span class="nc" id="L536">                boolean indexFlag = false;</span>
+<span class="nc bnc" id="L537" title="All 2 branches missed.">                if (document.getTitle().contains(baseEntity.getSearchValue()))</span>
+                {
+<span class="nc" id="L539">                    indexFlag = true;</span>
+<span class="nc" id="L540">                    document.setTitle(document.getTitle().replace(baseEntity.getSearchValue(), &quot;&lt;font color=\&quot;red\&quot;&gt;&quot; + baseEntity.getSearchValue() + &quot;&lt;/font&gt;&quot;));</span>
+                }
+<span class="nc bnc" id="L542" title="All 2 branches missed.">                if (document.getContent().contains(baseEntity.getSearchValue()))</span>
+                {
+<span class="nc" id="L544">                    indexFlag = true;</span>
+<span class="nc" id="L545">                    document.setContent(document.getContent().replace(baseEntity.getSearchValue(), &quot;&lt;font color=\&quot;red\&quot;&gt;&quot; + baseEntity.getSearchValue() + &quot;&lt;/font&gt;&quot;));</span>
+                }
+<span class="nc bnc" id="L547" title="All 2 branches missed.">                if (indexFlag)</span>
+                {
+<span class="nc" id="L549">                    documentList.add(document);</span>
+                }
+<span class="nc" id="L551">            }</span>
+        }
+<span class="nc" id="L553">        PageDomain pageDomain = TableSupport.buildPageRequest();</span>
+<span class="nc bnc" id="L554" title="All 4 branches missed.">        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize())</span>
+        {
+<span class="nc" id="L556">            rspData.setRows(documentList);</span>
+<span class="nc" id="L557">            rspData.setTotal(documentList.size());</span>
+<span class="nc" id="L558">            return rspData;</span>
+        }
+<span class="nc" id="L560">        Integer pageNum = (pageDomain.getPageNum() - 1) * 10;</span>
+<span class="nc" id="L561">        Integer pageSize = pageDomain.getPageNum() * 10;</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">        if (pageSize &gt; documentList.size())</span>
+        {
+<span class="nc" id="L564">            pageSize = documentList.size();</span>
+        }
+<span class="nc" id="L566">        rspData.setRows(documentList.subList(pageNum, pageSize));</span>
+<span class="nc" id="L567">        rspData.setTotal(documentList.size());</span>
+<span class="nc" id="L568">        return rspData;</span>
+    }
+
+    /**
+     * 查询树表数据
+     */
+    @PostMapping(&quot;/tree/list&quot;)
+    @ResponseBody
+    public TableDataInfo treeList(AreaModel areaModel)
+    {
+<span class="nc" id="L578">        TableDataInfo rspData = new TableDataInfo();</span>
+<span class="nc" id="L579">        List&lt;AreaModel&gt; areaList = new ArrayList&lt;AreaModel&gt;(Arrays.asList(new AreaModel[areas.size()]));</span>
+        // 默认查询条件 parentId 0
+<span class="nc" id="L581">        Collections.copy(areaList, areas);</span>
+<span class="nc" id="L582">        areaList.clear();</span>
+<span class="nc bnc" id="L583" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(areaModel.getAreaName()))</span>
+        {
+<span class="nc bnc" id="L585" title="All 2 branches missed.">            for (AreaModel area : areas)</span>
+            {
+<span class="nc bnc" id="L587" title="All 4 branches missed.">                if (area.getParentId() == 0 &amp;&amp; area.getAreaName().equals(areaModel.getAreaName()))</span>
+                {
+<span class="nc" id="L589">                    areaList.add(area);</span>
+                }
+<span class="nc" id="L591">            }</span>
+        }
+        else
+        {
+<span class="nc bnc" id="L595" title="All 2 branches missed.">            for (AreaModel area : areas)</span>
+            {
+<span class="nc bnc" id="L597" title="All 2 branches missed.">                if (area.getParentId() == 0)</span>
+                {
+<span class="nc" id="L599">                    areaList.add(area);</span>
+                }
+<span class="nc" id="L601">            }</span>
+        }
+<span class="nc" id="L603">        PageDomain pageDomain = TableSupport.buildPageRequest();</span>
+<span class="nc" id="L604">        Integer pageNum = (pageDomain.getPageNum() - 1) * pageDomain.getPageSize();</span>
+<span class="nc" id="L605">        Integer pageSize = pageDomain.getPageNum() * pageDomain.getPageSize();</span>
+<span class="nc bnc" id="L606" title="All 2 branches missed.">        if (pageSize &gt; areaList.size())</span>
+        {
+<span class="nc" id="L608">            pageSize = areaList.size();</span>
+        }
+<span class="nc" id="L610">        rspData.setRows(areaList.subList(pageNum, pageSize));</span>
+<span class="nc" id="L611">        rspData.setTotal(areaList.size());</span>
+<span class="nc" id="L612">        return rspData;</span>
+    }
+
+    /**
+     * 查询树表子节点数据
+     */
+    @PostMapping(&quot;/tree/listChild&quot;)
+    @ResponseBody
+    public List&lt;AreaModel&gt; listChild(AreaModel areaModel)
+    {
+<span class="nc" id="L622">        List&lt;AreaModel&gt; areaList = new ArrayList&lt;AreaModel&gt;(Arrays.asList(new AreaModel[areas.size()]));</span>
+        // 查询条件 parentId
+<span class="nc" id="L624">        Collections.copy(areaList, areas);</span>
+<span class="nc" id="L625">        areaList.clear();</span>
+<span class="nc bnc" id="L626" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(areaModel.getAreaName()))</span>
+        {
+<span class="nc bnc" id="L628" title="All 2 branches missed.">            for (AreaModel area : areas)</span>
+            {
+<span class="nc bnc" id="L630" title="All 4 branches missed.">                if (area.getParentId().intValue() == areaModel.getParentId().intValue() &amp;&amp; area.getAreaName().equals(areaModel.getAreaName()))</span>
+                {
+<span class="nc" id="L632">                    areaList.add(area);</span>
+                }
+<span class="nc" id="L634">            }</span>
+        }
+        else
+        {
+<span class="nc bnc" id="L638" title="All 2 branches missed.">            for (AreaModel area : areas)</span>
+            {
+<span class="nc bnc" id="L640" title="All 2 branches missed.">                if (area.getParentId().intValue() == areaModel.getParentId().intValue())</span>
+                {
+<span class="nc" id="L642">                    areaList.add(area);</span>
+                }
+<span class="nc" id="L644">            }</span>
+        }
+<span class="nc" id="L646">        return areaList;</span>
+    }
+}
+
+class UserTableColumn
+{
+    /** 表头 */
+    private String title;
+    /** 字段 */
+    private String field;
+
+    public UserTableColumn()
+<span class="nc" id="L658">    {</span>
+
+<span class="nc" id="L660">    }</span>
+
+    public UserTableColumn(String title, String field)
+<span class="nc" id="L663">    {</span>
+<span class="nc" id="L664">        this.title = title;</span>
+<span class="nc" id="L665">        this.field = field;</span>
+<span class="nc" id="L666">    }</span>
+
+    public String getTitle()
+    {
+<span class="nc" id="L670">        return title;</span>
+    }
+
+    public void setTitle(String title)
+    {
+<span class="nc" id="L675">        this.title = title;</span>
+<span class="nc" id="L676">    }</span>
+
+    public String getField()
+    {
+<span class="nc" id="L680">        return field;</span>
+    }
+
+    public void setField(String field)
+    {
+<span class="nc" id="L685">        this.field = field;</span>
+<span class="nc" id="L686">    }</span>
+}
+
+class UserTableModel
+{
+    /** 用户ID */
+    private int userId;
+
+    /** 用户编号 */
+    @Excel(name = &quot;用户编号&quot;, cellType = ColumnType.NUMERIC)
+    private String userCode;
+
+    /** 用户姓名 */
+    @Excel(name = &quot;用户姓名&quot;)
+    private String userName;
+
+    /** 用户性别 */
+    private String userSex;
+
+    /** 用户手机 */
+    @Excel(name = &quot;用户手机&quot;)
+    private String userPhone;
+
+    /** 用户邮箱 */
+    @Excel(name = &quot;用户邮箱&quot;)
+    private String userEmail;
+
+    /** 用户余额 */
+    @Excel(name = &quot;用户余额&quot;, cellType = ColumnType.NUMERIC)
+    private double userBalance;
+
+    /** 用户状态（0正常 1停用） */
+    private String status;
+
+    /** 创建时间 */
+    @JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Date createTime;
+
+    public UserTableModel()
+<span class="nc" id="L725">    {</span>
+
+<span class="nc" id="L727">    }</span>
+
+    public UserTableModel(int userId, String userCode, String userName, String userSex, String userPhone,
+            String userEmail, double userBalance, String status)
+<span class="nc" id="L731">    {</span>
+<span class="nc" id="L732">        this.userId = userId;</span>
+<span class="nc" id="L733">        this.userCode = userCode;</span>
+<span class="nc" id="L734">        this.userName = userName;</span>
+<span class="nc" id="L735">        this.userSex = userSex;</span>
+<span class="nc" id="L736">        this.userPhone = userPhone;</span>
+<span class="nc" id="L737">        this.userEmail = userEmail;</span>
+<span class="nc" id="L738">        this.userBalance = userBalance;</span>
+<span class="nc" id="L739">        this.status = status;</span>
+<span class="nc" id="L740">        this.createTime = DateUtils.getNowDate();</span>
+<span class="nc" id="L741">    }</span>
+
+    public int getUserId()
+    {
+<span class="nc" id="L745">        return userId;</span>
+    }
+
+    public void setUserId(int userId)
+    {
+<span class="nc" id="L750">        this.userId = userId;</span>
+<span class="nc" id="L751">    }</span>
+
+    public String getUserCode()
+    {
+<span class="nc" id="L755">        return userCode;</span>
+    }
+
+    public void setUserCode(String userCode)
+    {
+<span class="nc" id="L760">        this.userCode = userCode;</span>
+<span class="nc" id="L761">    }</span>
+
+    public String getUserName()
+    {
+<span class="nc" id="L765">        return userName;</span>
+    }
+
+    public void setUserName(String userName)
+    {
+<span class="nc" id="L770">        this.userName = userName;</span>
+<span class="nc" id="L771">    }</span>
+
+    public String getUserSex()
+    {
+<span class="nc" id="L775">        return userSex;</span>
+    }
+
+    public void setUserSex(String userSex)
+    {
+<span class="nc" id="L780">        this.userSex = userSex;</span>
+<span class="nc" id="L781">    }</span>
+
+    public String getUserPhone()
+    {
+<span class="nc" id="L785">        return userPhone;</span>
+    }
+
+    public void setUserPhone(String userPhone)
+    {
+<span class="nc" id="L790">        this.userPhone = userPhone;</span>
+<span class="nc" id="L791">    }</span>
+
+    public String getUserEmail()
+    {
+<span class="nc" id="L795">        return userEmail;</span>
+    }
+
+    public void setUserEmail(String userEmail)
+    {
+<span class="nc" id="L800">        this.userEmail = userEmail;</span>
+<span class="nc" id="L801">    }</span>
+
+    public double getUserBalance()
+    {
+<span class="nc" id="L805">        return userBalance;</span>
+    }
+
+    public void setUserBalance(double userBalance)
+    {
+<span class="nc" id="L810">        this.userBalance = userBalance;</span>
+<span class="nc" id="L811">    }</span>
+
+    public String getStatus()
+    {
+<span class="nc" id="L815">        return status;</span>
+    }
+
+    public void setStatus(String status)
+    {
+<span class="nc" id="L820">        this.status = status;</span>
+<span class="nc" id="L821">    }</span>
+
+    public Date getCreateTime()
+    {
+<span class="nc" id="L825">        return createTime;</span>
+    }
+
+    public void setCreateTime(Date createTime)
+    {
+<span class="nc" id="L830">        this.createTime = createTime;</span>
+<span class="nc" id="L831">    }</span>
+}
+class AreaModel
+{
+    /** 编号 */
+    private Long id;
+
+    /** 父编号 */
+    private Long parentId;
+
+    /** 区域名称 */
+    private String areaName;
+
+    /** 区域代码 */
+    private String areaCode;
+
+    /** 名称首字母 */
+    private String simplePy;
+
+    /** 名称全拼 */
+    private String pinYin;
+
+    /** 是否有子节点（0无 1有） */
+<span class="nc" id="L854">    private Integer isTreeLeaf = 1;</span>
+
+    public AreaModel()
+<span class="nc" id="L857">    {</span>
+
+<span class="nc" id="L859">    }</span>
+
+    public AreaModel(int id, int parentId, String areaName, String areaCode, String simplePy, String pinYin, Integer isTreeLeaf)
+<span class="nc" id="L862">    {</span>
+<span class="nc" id="L863">        this.id = Long.valueOf(id);</span>
+<span class="nc" id="L864">        this.parentId = Long.valueOf(parentId);</span>
+<span class="nc" id="L865">        this.areaName = areaName;</span>
+<span class="nc" id="L866">        this.areaCode = areaCode;</span>
+<span class="nc" id="L867">        this.simplePy = simplePy;</span>
+<span class="nc" id="L868">        this.pinYin = pinYin;</span>
+<span class="nc" id="L869">        this.isTreeLeaf = isTreeLeaf;</span>
+<span class="nc" id="L870">    }</span>
+
+    public Long getId()
+    {
+<span class="nc" id="L874">        return id;</span>
+    }
+
+    public void setId(Long id)
+    {
+<span class="nc" id="L879">        this.id = id;</span>
+<span class="nc" id="L880">    }</span>
+
+    public Long getParentId()
+    {
+<span class="nc" id="L884">        return parentId;</span>
+    }
+
+    public void setParentId(Long parentId)
+    {
+<span class="nc" id="L889">        this.parentId = parentId;</span>
+<span class="nc" id="L890">    }</span>
+
+    public String getAreaName()
+    {
+<span class="nc" id="L894">        return areaName;</span>
+    }
+
+    public void setAreaName(String areaName)
+    {
+<span class="nc" id="L899">        this.areaName = areaName;</span>
+<span class="nc" id="L900">    }</span>
+
+    public String getAreaCode()
+    {
+<span class="nc" id="L904">        return areaCode;</span>
+    }
+
+    public void setAreaCode(String areaCode)
+    {
+<span class="nc" id="L909">        this.areaCode = areaCode;</span>
+<span class="nc" id="L910">    }</span>
+
+    public String getSimplePy()
+    {
+<span class="nc" id="L914">        return simplePy;</span>
+    }
+
+    public void setSimplePy(String simplePy)
+    {
+<span class="nc" id="L919">        this.simplePy = simplePy;</span>
+<span class="nc" id="L920">    }</span>
+
+    public String getPinYin()
+    {
+<span class="nc" id="L924">        return pinYin;</span>
+    }
+
+    public void setPinYin(String pinYin)
+    {
+<span class="nc" id="L929">        this.pinYin = pinYin;</span>
+<span class="nc" id="L930">    }</span>
+
+    public Integer getIsTreeLeaf()
+    {
+<span class="nc" id="L934">        return isTreeLeaf;</span>
+    }
+
+    public void setIsTreeLeaf(Integer isTreeLeaf)
+    {
+<span class="nc" id="L939">        this.isTreeLeaf = isTreeLeaf;</span>
+<span class="nc" id="L940">    }</span>
+}
+
+class DocumentModel
+{
+    /** 编号 */
+    private int tableId;
+
+    /** 档号 */
+    private String archiveNo;
+
+    /** 文件编号 */
+    private String docNo;
+
+    /** 标题 */
+    private String title;
+
+    /** 内容 */
+    private String content;
+
+    public DocumentModel()
+<span class="nc" id="L961">    {</span>
+
+<span class="nc" id="L963">    }</span>
+
+    public DocumentModel(int tableId, String archiveNo, String docNo, String title, String content)
+<span class="nc" id="L966">    {</span>
+<span class="nc" id="L967">        this.tableId = tableId;</span>
+<span class="nc" id="L968">        this.archiveNo = archiveNo;</span>
+<span class="nc" id="L969">        this.docNo = docNo;</span>
+<span class="nc" id="L970">        this.title = title;</span>
+<span class="nc" id="L971">        this.content = content;</span>
+<span class="nc" id="L972">    }</span>
+
+    public int getTableId()
+    {
+<span class="nc" id="L976">        return tableId;</span>
+    }
+
+    public String getArchiveNo()
+    {
+<span class="nc" id="L981">        return archiveNo;</span>
+    }
+
+    public String getDocNo()
+    {
+<span class="nc" id="L986">        return docNo;</span>
+    }
+
+    public String getTitle()
+    {
+<span class="nc" id="L991">        return title;</span>
+    }
+
+    public String getContent()
+    {
+<span class="nc" id="L996">        return content;</span>
+    }
+
+    public void setTableId(int tableId)
+    {
+<span class="nc" id="L1001">        this.tableId = tableId;</span>
+<span class="nc" id="L1002">    }</span>
+
+    public void setArchiveNo(String archiveNo)
+    {
+<span class="nc" id="L1006">        this.archiveNo = archiveNo;</span>
+<span class="nc" id="L1007">    }</span>
+
+    public void setDocNo(String docNo)
+    {
+<span class="nc" id="L1011">        this.docNo = docNo;</span>
+<span class="nc" id="L1012">    }</span>
+
+    public void setTitle(String title)
+    {
+<span class="nc" id="L1016">        this.title = title;</span>
+<span class="nc" id="L1017">    }</span>
+
+    public void setContent(String content)
+    {
+<span class="nc" id="L1021">        this.content = content;</span>
+<span class="nc" id="L1022">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

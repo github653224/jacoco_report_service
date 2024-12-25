@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DemoFormController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.controller</a> &gt; <span class="el_source">DemoFormController.java</span></div><h1>DemoFormController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.alibaba.fastjson.JSON;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.CxSelect;
+import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.common.json.JSONObject.JSONArray;
+import com.ruoyi.common.utils.StringUtils;
+
+/**
+ * 表单相关
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/demo/form&quot;)
+<span class="nc" id="L25">public class DemoFormController</span>
+{
+<span class="nc" id="L27">    private String prefix = &quot;demo/form&quot;;</span>
+
+<span class="nc" id="L29">    private final static List&lt;UserFormModel&gt; users = new ArrayList&lt;UserFormModel&gt;();</span>
+    {
+<span class="nc" id="L31">        users.add(new UserFormModel(1, &quot;1000001&quot;, &quot;测试1&quot;, &quot;15888888888&quot;));</span>
+<span class="nc" id="L32">        users.add(new UserFormModel(2, &quot;1000002&quot;, &quot;测试2&quot;, &quot;15666666666&quot;));</span>
+<span class="nc" id="L33">        users.add(new UserFormModel(3, &quot;1000003&quot;, &quot;测试3&quot;, &quot;15666666666&quot;));</span>
+<span class="nc" id="L34">        users.add(new UserFormModel(4, &quot;1000004&quot;, &quot;测试4&quot;, &quot;15666666666&quot;));</span>
+<span class="nc" id="L35">        users.add(new UserFormModel(5, &quot;1000005&quot;, &quot;测试5&quot;, &quot;15666666666&quot;));</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * 按钮页
+     */
+    @GetMapping(&quot;/button&quot;)
+    public String button()
+    {
+<span class="nc" id="L44">        return prefix + &quot;/button&quot;;</span>
+    }
+
+    /**
+     * 下拉框
+     */
+    @GetMapping(&quot;/select&quot;)
+    public String select()
+    {
+<span class="nc" id="L53">        return prefix + &quot;/select&quot;;</span>
+    }
+
+    /**
+     * 时间轴
+     */
+    @GetMapping(&quot;/timeline&quot;)
+    public String timeline()
+    {
+<span class="nc" id="L62">        return prefix + &quot;/timeline&quot;;</span>
+    }
+
+    /**
+     * 进度条
+     */
+    @GetMapping(&quot;/progress_bars&quot;)
+    public String progress_bars()
+    {
+<span class="nc" id="L71">        return prefix + &quot;/progress_bars&quot;;</span>
+    }
+
+    /**
+     * 表单校验
+     */
+    @GetMapping(&quot;/validate&quot;)
+    public String validate()
+    {
+<span class="nc" id="L80">        return prefix + &quot;/validate&quot;;</span>
+    }
+
+    /**
+     * 功能扩展（包含文件上传）
+     */
+    @GetMapping(&quot;/jasny&quot;)
+    public String jasny()
+    {
+<span class="nc" id="L89">        return prefix + &quot;/jasny&quot;;</span>
+    }
+
+    /**
+     * 拖动排序
+     */
+    @GetMapping(&quot;/sortable&quot;)
+    public String sortable()
+    {
+<span class="nc" id="L98">        return prefix + &quot;/sortable&quot;;</span>
+    }
+
+    /**
+     * 单据打印
+     */
+    @GetMapping(&quot;/invoice&quot;)
+    public String invoice()
+    {
+<span class="nc" id="L107">        return prefix + &quot;/invoice&quot;;</span>
+    }
+
+    /**
+     * 标签 &amp; 提示
+     */
+    @GetMapping(&quot;/labels_tips&quot;)
+    public String labels_tips()
+    {
+<span class="nc" id="L116">        return prefix + &quot;/labels_tips&quot;;</span>
+    }
+
+    /**
+     * 选项卡 &amp; 面板
+     */
+    @GetMapping(&quot;/tabs_panels&quot;)
+    public String tabs_panels()
+    {
+<span class="nc" id="L125">        return prefix + &quot;/tabs_panels&quot;;</span>
+    }
+
+    /**
+     * 栅格
+     */
+    @GetMapping(&quot;/grid&quot;)
+    public String grid()
+    {
+<span class="nc" id="L134">        return prefix + &quot;/grid&quot;;</span>
+    }
+
+    /**
+     * 表单向导
+     */
+    @GetMapping(&quot;/wizard&quot;)
+    public String wizard()
+    {
+<span class="nc" id="L143">        return prefix + &quot;/wizard&quot;;</span>
+    }
+
+    /**
+     * 文件上传
+     */
+    @GetMapping(&quot;/upload&quot;)
+    public String upload()
+    {
+<span class="nc" id="L152">        return prefix + &quot;/upload&quot;;</span>
+    }
+
+    /**
+     * 日期和时间页
+     */
+    @GetMapping(&quot;/datetime&quot;)
+    public String datetime()
+    {
+<span class="nc" id="L161">        return prefix + &quot;/datetime&quot;;</span>
+    }
+
+    /**
+     * 左右互选组件
+     */
+    @GetMapping(&quot;/duallistbox&quot;)
+    public String duallistbox()
+    {
+<span class="nc" id="L170">        return prefix + &quot;/duallistbox&quot;;</span>
+    }
+
+    /**
+     * 基本表单
+     */
+    @GetMapping(&quot;/basic&quot;)
+    public String basic()
+    {
+<span class="nc" id="L179">        return prefix + &quot;/basic&quot;;</span>
+    }
+
+    /**
+     * 卡片列表
+     */
+    @GetMapping(&quot;/cards&quot;)
+    public String cards()
+    {
+<span class="nc" id="L188">        return prefix + &quot;/cards&quot;;</span>
+    }
+
+    /**
+     * summernote 富文本编辑器
+     */
+    @GetMapping(&quot;/summernote&quot;)
+    public String summernote()
+    {
+<span class="nc" id="L197">        return prefix + &quot;/summernote&quot;;</span>
+    }
+
+    /**
+     * 搜索自动补全
+     */
+    @GetMapping(&quot;/autocomplete&quot;)
+    public String autocomplete()
+    {
+<span class="nc" id="L206">        return prefix + &quot;/autocomplete&quot;;</span>
+    }
+
+    /**
+     * 多级联动下拉
+     */
+    @GetMapping(&quot;/cxselect&quot;)
+    public String cxselect(ModelMap mmap)
+    {
+<span class="nc" id="L215">        CxSelect cxSelectTB = new CxSelect();</span>
+<span class="nc" id="L216">        cxSelectTB.setN(&quot;淘宝&quot;);</span>
+<span class="nc" id="L217">        cxSelectTB.setV(&quot;taobao&quot;);</span>
+<span class="nc" id="L218">        CxSelect cxSelectTm = new CxSelect();</span>
+<span class="nc" id="L219">        cxSelectTm.setN(&quot;天猫&quot;);</span>
+<span class="nc" id="L220">        cxSelectTm.setV(&quot;tm&quot;);</span>
+<span class="nc" id="L221">        CxSelect cxSelectJhs = new CxSelect();</span>
+<span class="nc" id="L222">        cxSelectJhs.setN(&quot;聚划算&quot;);</span>
+<span class="nc" id="L223">        cxSelectJhs.setV(&quot;jhs&quot;);</span>
+<span class="nc" id="L224">        List&lt;CxSelect&gt; tmList = new ArrayList&lt;CxSelect&gt;();</span>
+<span class="nc" id="L225">        tmList.add(cxSelectTm);</span>
+<span class="nc" id="L226">        tmList.add(cxSelectJhs);</span>
+<span class="nc" id="L227">        cxSelectTB.setS(tmList);</span>
+
+<span class="nc" id="L229">        CxSelect cxSelectJD = new CxSelect();</span>
+<span class="nc" id="L230">        cxSelectJD.setN(&quot;京东&quot;);</span>
+<span class="nc" id="L231">        cxSelectJD.setV(&quot;jd&quot;);</span>
+<span class="nc" id="L232">        CxSelect cxSelectCs = new CxSelect();</span>
+<span class="nc" id="L233">        cxSelectCs.setN(&quot;京东超市&quot;);</span>
+<span class="nc" id="L234">        cxSelectCs.setV(&quot;jdcs&quot;);</span>
+<span class="nc" id="L235">        CxSelect cxSelectSx = new CxSelect();</span>
+<span class="nc" id="L236">        cxSelectSx.setN(&quot;京东生鲜&quot;);</span>
+<span class="nc" id="L237">        cxSelectSx.setV(&quot;jdsx&quot;);</span>
+<span class="nc" id="L238">        List&lt;CxSelect&gt; jdList = new ArrayList&lt;CxSelect&gt;();</span>
+<span class="nc" id="L239">        jdList.add(cxSelectCs);</span>
+<span class="nc" id="L240">        jdList.add(cxSelectSx);</span>
+<span class="nc" id="L241">        cxSelectJD.setS(jdList);</span>
+
+<span class="nc" id="L243">        List&lt;CxSelect&gt; cxList = new ArrayList&lt;CxSelect&gt;();</span>
+<span class="nc" id="L244">        cxList.add(cxSelectTB);</span>
+<span class="nc" id="L245">        cxList.add(cxSelectJD);</span>
+
+<span class="nc" id="L247">        mmap.put(&quot;data&quot;, JSON.toJSON(cxList));</span>
+<span class="nc" id="L248">        return prefix + &quot;/cxselect&quot;;</span>
+    }
+
+    /**
+     * 局部刷新
+     */
+    @GetMapping(&quot;/localrefresh&quot;)
+    public String localRefresh(ModelMap mmap)
+    {
+<span class="nc" id="L257">        JSONArray list = new JSONArray();</span>
+<span class="nc" id="L258">        JSONObject item = new JSONObject();</span>
+<span class="nc" id="L259">        item.put(&quot;name&quot;, &quot;这条任务数据是由ModelMap传递到页面的，点击添加按钮后会将这条数据替换为新数据&quot;);</span>
+<span class="nc" id="L260">        item.put(&quot;type&quot;, &quot;默认&quot;);</span>
+<span class="nc" id="L261">        item.put(&quot;date&quot;, &quot;2020.06.10&quot;);</span>
+<span class="nc" id="L262">        list.add(item);</span>
+<span class="nc" id="L263">        mmap.put(&quot;tasks&quot;, list);</span>
+<span class="nc" id="L264">        mmap.put(&quot;min&quot;, 2);</span>
+<span class="nc" id="L265">        mmap.put(&quot;max&quot;, 10);</span>
+<span class="nc" id="L266">        return prefix + &quot;/localrefresh&quot;;</span>
+    }
+
+    /**
+     * 局部刷新-添加任务
+     * 
+     * @param fragment 页面中的模板名称
+     * @param taskName 任务名称
+     */
+    @PostMapping(&quot;/localrefresh/task&quot;)
+    public String localRefreshTask(String fragment, String taskName, ModelMap mmap)
+    {
+<span class="nc" id="L278">        JSONArray list = new JSONArray();</span>
+<span class="nc" id="L279">        JSONObject item = new JSONObject();</span>
+<span class="nc" id="L280">        item.put(&quot;name&quot;, StringUtils.defaultIfBlank(taskName, &quot;通过电话销售过程中了解各盛市的设备仪器使用、采购情况及相关重要追踪人&quot;));</span>
+<span class="nc" id="L281">        item.put(&quot;type&quot;, &quot;新增&quot;);</span>
+<span class="nc" id="L282">        item.put(&quot;date&quot;, &quot;2018.06.10&quot;);</span>
+<span class="nc" id="L283">        list.add(item);</span>
+<span class="nc" id="L284">        item = new JSONObject();</span>
+<span class="nc" id="L285">        item.put(&quot;name&quot;, &quot;提高自己电话营销技巧，灵活专业地与客户进行电话交流&quot;);</span>
+<span class="nc" id="L286">        item.put(&quot;type&quot;, &quot;新增&quot;);</span>
+<span class="nc" id="L287">        item.put(&quot;date&quot;, &quot;2018.06.12&quot;);</span>
+<span class="nc" id="L288">        list.add(item);</span>
+<span class="nc" id="L289">        mmap.put(&quot;tasks&quot;, list);</span>
+<span class="nc" id="L290">        return prefix + &quot;/localrefresh::&quot; + fragment;</span>
+    }
+
+    /**
+     * 模拟数据
+     */
+    @GetMapping(&quot;/cityData&quot;)
+    @ResponseBody
+    public String cityData()
+    {
+<span class="nc" id="L300">        String data = &quot;[{\&quot;n\&quot;:\&quot;湖南省\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;长沙市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;芙蓉区\&quot;},{\&quot;n\&quot;:\&quot;天心区\&quot;},{\&quot;n\&quot;:\&quot;岳麓区\&quot;},{\&quot;n\&quot;:\&quot;开福区\&quot;},{\&quot;n\&quot;:\&quot;雨花区\&quot;},{\&quot;n\&quot;:\&quot;望城区\&quot;},{\&quot;n\&quot;:\&quot;长沙县\&quot;},{\&quot;n\&quot;:\&quot;宁乡县\&quot;},{\&quot;n\&quot;:\&quot;浏阳市\&quot;}]},{\&quot;n\&quot;:\&quot;株洲市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;荷塘区\&quot;},{\&quot;n\&quot;:\&quot;芦淞区\&quot;},{\&quot;n\&quot;:\&quot;石峰区\&quot;},{\&quot;n\&quot;:\&quot;天元区\&quot;},{\&quot;n\&quot;:\&quot;株洲县\&quot;},{\&quot;n\&quot;:\&quot;攸县\&quot;},{\&quot;n\&quot;:\&quot;茶陵县\&quot;},{\&quot;n\&quot;:\&quot;炎陵县\&quot;},{\&quot;n\&quot;:\&quot;醴陵市\&quot;}]},{\&quot;n\&quot;:\&quot;湘潭市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;雨湖区\&quot;},{\&quot;n\&quot;:\&quot;岳塘区\&quot;},{\&quot;n\&quot;:\&quot;湘潭县\&quot;},{\&quot;n\&quot;:\&quot;湘乡市\&quot;},{\&quot;n\&quot;:\&quot;韶山市\&quot;}]},{\&quot;n\&quot;:\&quot;衡阳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;珠晖区\&quot;},{\&quot;n\&quot;:\&quot;雁峰区\&quot;},{\&quot;n\&quot;:\&quot;石鼓区\&quot;},{\&quot;n\&quot;:\&quot;蒸湘区\&quot;},{\&quot;n\&quot;:\&quot;南岳区\&quot;},{\&quot;n\&quot;:\&quot;衡阳县\&quot;},{\&quot;n\&quot;:\&quot;衡南县\&quot;},{\&quot;n\&quot;:\&quot;衡山县\&quot;},{\&quot;n\&quot;:\&quot;衡东县\&quot;},{\&quot;n\&quot;:\&quot;祁东县\&quot;},{\&quot;n\&quot;:\&quot;耒阳市\&quot;},{\&quot;n\&quot;:\&quot;常宁市\&quot;}]},{\&quot;n\&quot;:\&quot;邵阳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;双清区\&quot;},{\&quot;n\&quot;:\&quot;大祥区\&quot;},{\&quot;n\&quot;:\&quot;北塔区\&quot;},{\&quot;n\&quot;:\&quot;邵东县\&quot;},{\&quot;n\&quot;:\&quot;新邵县\&quot;},{\&quot;n\&quot;:\&quot;邵阳县\&quot;},{\&quot;n\&quot;:\&quot;隆回县\&quot;},{\&quot;n\&quot;:\&quot;洞口县\&quot;},{\&quot;n\&quot;:\&quot;绥宁县\&quot;},{\&quot;n\&quot;:\&quot;新宁县\&quot;},{\&quot;n\&quot;:\&quot;城步苗族自治县\&quot;},{\&quot;n\&quot;:\&quot;武冈市\&quot;}]},{\&quot;n\&quot;:\&quot;岳阳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;岳阳楼区\&quot;},{\&quot;n\&quot;:\&quot;云溪区\&quot;},{\&quot;n\&quot;:\&quot;君山区\&quot;},{\&quot;n\&quot;:\&quot;岳阳县\&quot;},{\&quot;n\&quot;:\&quot;华容县\&quot;},{\&quot;n\&quot;:\&quot;湘阴县\&quot;},{\&quot;n\&quot;:\&quot;平江县\&quot;},{\&quot;n\&quot;:\&quot;汨罗市\&quot;},{\&quot;n\&quot;:\&quot;临湘市\&quot;}]},{\&quot;n\&quot;:\&quot;常德市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;武陵区\&quot;},{\&quot;n\&quot;:\&quot;鼎城区\&quot;},{\&quot;n\&quot;:\&quot;安乡县\&quot;},{\&quot;n\&quot;:\&quot;汉寿县\&quot;},{\&quot;n\&quot;:\&quot;澧县\&quot;},{\&quot;n\&quot;:\&quot;临澧县\&quot;},{\&quot;n\&quot;:\&quot;桃源县\&quot;},{\&quot;n\&quot;:\&quot;石门县\&quot;},{\&quot;n\&quot;:\&quot;津市市\&quot;}]},{\&quot;n\&quot;:\&quot;张家界市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;永定区\&quot;},{\&quot;n\&quot;:\&quot;武陵源区\&quot;},{\&quot;n\&quot;:\&quot;慈利县\&quot;},{\&quot;n\&quot;:\&quot;桑植县\&quot;}]},{\&quot;n\&quot;:\&quot;益阳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;资阳区\&quot;},{\&quot;n\&quot;:\&quot;赫山区\&quot;},{\&quot;n\&quot;:\&quot;南县\&quot;},{\&quot;n\&quot;:\&quot;桃江县\&quot;},{\&quot;n\&quot;:\&quot;安化县\&quot;},{\&quot;n\&quot;:\&quot;沅江市\&quot;}]},{\&quot;n\&quot;:\&quot;郴州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;北湖区\&quot;},{\&quot;n\&quot;:\&quot;苏仙区\&quot;},{\&quot;n\&quot;:\&quot;桂阳县\&quot;},{\&quot;n\&quot;:\&quot;宜章县\&quot;},{\&quot;n\&quot;:\&quot;永兴县\&quot;},{\&quot;n\&quot;:\&quot;嘉禾县\&quot;},{\&quot;n\&quot;:\&quot;临武县\&quot;},{\&quot;n\&quot;:\&quot;汝城县\&quot;},{\&quot;n\&quot;:\&quot;桂东县\&quot;},{\&quot;n\&quot;:\&quot;安仁县\&quot;},{\&quot;n\&quot;:\&quot;资兴市\&quot;}]},{\&quot;n\&quot;:\&quot;永州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;零陵区\&quot;},{\&quot;n\&quot;:\&quot;冷水滩区\&quot;},{\&quot;n\&quot;:\&quot;祁阳县\&quot;},{\&quot;n\&quot;:\&quot;东安县\&quot;},{\&quot;n\&quot;:\&quot;双牌县\&quot;},{\&quot;n\&quot;:\&quot;道县\&quot;},{\&quot;n\&quot;:\&quot;江永县\&quot;},{\&quot;n\&quot;:\&quot;宁远县\&quot;},{\&quot;n\&quot;:\&quot;蓝山县\&quot;},{\&quot;n\&quot;:\&quot;新田县\&quot;},{\&quot;n\&quot;:\&quot;江华瑶族自治县\&quot;}]},{\&quot;n\&quot;:\&quot;怀化市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;鹤城区\&quot;},{\&quot;n\&quot;:\&quot;中方县\&quot;},{\&quot;n\&quot;:\&quot;沅陵县\&quot;},{\&quot;n\&quot;:\&quot;辰溪县\&quot;},{\&quot;n\&quot;:\&quot;溆浦县\&quot;},{\&quot;n\&quot;:\&quot;会同县\&quot;},{\&quot;n\&quot;:\&quot;麻阳苗族自治县\&quot;},{\&quot;n\&quot;:\&quot;新晃侗族自治县\&quot;},{\&quot;n\&quot;:\&quot;芷江侗族自治县\&quot;},{\&quot;n\&quot;:\&quot;靖州苗族侗族自治县\&quot;},{\&quot;n\&quot;:\&quot;通道侗族自治县\&quot;},{\&quot;n\&quot;:\&quot;洪江市\&quot;}]},{\&quot;n\&quot;:\&quot;娄底市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;娄星区\&quot;},{\&quot;n\&quot;:\&quot;双峰县\&quot;},{\&quot;n\&quot;:\&quot;新化县\&quot;},{\&quot;n\&quot;:\&quot;冷水江市\&quot;},{\&quot;n\&quot;:\&quot;涟源市\&quot;}]},{\&quot;n\&quot;:\&quot;湘西土家族苗族自治州\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;吉首市\&quot;},{\&quot;n\&quot;:\&quot;泸溪县\&quot;},{\&quot;n\&quot;:\&quot;凤凰县\&quot;},{\&quot;n\&quot;:\&quot;花垣县\&quot;},{\&quot;n\&quot;:\&quot;保靖县\&quot;},{\&quot;n\&quot;:\&quot;古丈县\&quot;},{\&quot;n\&quot;:\&quot;永顺县\&quot;},{\&quot;n\&quot;:\&quot;龙山县\&quot;}]}]},{\&quot;n\&quot;:\&quot;广东省\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;广州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;荔湾区\&quot;},{\&quot;n\&quot;:\&quot;越秀区\&quot;},{\&quot;n\&quot;:\&quot;海珠区\&quot;},{\&quot;n\&quot;:\&quot;天河区\&quot;},{\&quot;n\&quot;:\&quot;白云区\&quot;},{\&quot;n\&quot;:\&quot;黄埔区\&quot;},{\&quot;n\&quot;:\&quot;番禺区\&quot;},{\&quot;n\&quot;:\&quot;花都区\&quot;},{\&quot;n\&quot;:\&quot;南沙区\&quot;},{\&quot;n\&quot;:\&quot;萝岗区\&quot;},{\&quot;n\&quot;:\&quot;增城市\&quot;},{\&quot;n\&quot;:\&quot;从化市\&quot;}]},{\&quot;n\&quot;:\&quot;韶关市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;武江区\&quot;},{\&quot;n\&quot;:\&quot;浈江区\&quot;},{\&quot;n\&quot;:\&quot;曲江区\&quot;},{\&quot;n\&quot;:\&quot;始兴县\&quot;},{\&quot;n\&quot;:\&quot;仁化县\&quot;},{\&quot;n\&quot;:\&quot;翁源县\&quot;},{\&quot;n\&quot;:\&quot;乳源瑶族自治县\&quot;},{\&quot;n\&quot;:\&quot;新丰县\&quot;},{\&quot;n\&quot;:\&quot;乐昌市\&quot;},{\&quot;n\&quot;:\&quot;南雄市\&quot;}]},{\&quot;n\&quot;:\&quot;深圳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;罗湖区\&quot;},{\&quot;n\&quot;:\&quot;福田区\&quot;},{\&quot;n\&quot;:\&quot;南山区\&quot;},{\&quot;n\&quot;:\&quot;宝安区\&quot;},{\&quot;n\&quot;:\&quot;龙岗区\&quot;},{\&quot;n\&quot;:\&quot;盐田区\&quot;}]},{\&quot;n\&quot;:\&quot;珠海市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;香洲区\&quot;},{\&quot;n\&quot;:\&quot;斗门区\&quot;},{\&quot;n\&quot;:\&quot;金湾区\&quot;}]},{\&quot;n\&quot;:\&quot;汕头市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;龙湖区\&quot;},{\&quot;n\&quot;:\&quot;金平区\&quot;},{\&quot;n\&quot;:\&quot;濠江区\&quot;},{\&quot;n\&quot;:\&quot;潮阳区\&quot;},{\&quot;n\&quot;:\&quot;潮南区\&quot;},{\&quot;n\&quot;:\&quot;澄海区\&quot;},{\&quot;n\&quot;:\&quot;南澳县\&quot;}]},{\&quot;n\&quot;:\&quot;佛山市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;禅城区\&quot;},{\&quot;n\&quot;:\&quot;南海区\&quot;},{\&quot;n\&quot;:\&quot;顺德区\&quot;},{\&quot;n\&quot;:\&quot;三水区\&quot;},{\&quot;n\&quot;:\&quot;高明区\&quot;}]},{\&quot;n\&quot;:\&quot;江门市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;蓬江区\&quot;},{\&quot;n\&quot;:\&quot;江海区\&quot;},{\&quot;n\&quot;:\&quot;新会区\&quot;},{\&quot;n\&quot;:\&quot;台山市\&quot;},{\&quot;n\&quot;:\&quot;开平市\&quot;},{\&quot;n\&quot;:\&quot;鹤山市\&quot;},{\&quot;n\&quot;:\&quot;恩平市\&quot;}]},{\&quot;n\&quot;:\&quot;湛江市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;赤坎区\&quot;},{\&quot;n\&quot;:\&quot;霞山区\&quot;},{\&quot;n\&quot;:\&quot;坡头区\&quot;},{\&quot;n\&quot;:\&quot;麻章区\&quot;},{\&quot;n\&quot;:\&quot;遂溪县\&quot;},{\&quot;n\&quot;:\&quot;徐闻县\&quot;},{\&quot;n\&quot;:\&quot;廉江市\&quot;},{\&quot;n\&quot;:\&quot;雷州市\&quot;},{\&quot;n\&quot;:\&quot;吴川市\&quot;}]},{\&quot;n\&quot;:\&quot;茂名市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;茂南区\&quot;},{\&quot;n\&quot;:\&quot;茂港区\&quot;},{\&quot;n\&quot;:\&quot;电白县\&quot;},{\&quot;n\&quot;:\&quot;高州市\&quot;},{\&quot;n\&quot;:\&quot;化州市\&quot;},{\&quot;n\&quot;:\&quot;信宜市\&quot;}]},{\&quot;n\&quot;:\&quot;肇庆市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;端州区\&quot;},{\&quot;n\&quot;:\&quot;鼎湖区\&quot;},{\&quot;n\&quot;:\&quot;广宁县\&quot;},{\&quot;n\&quot;:\&quot;怀集县\&quot;},{\&quot;n\&quot;:\&quot;封开县\&quot;},{\&quot;n\&quot;:\&quot;德庆县\&quot;},{\&quot;n\&quot;:\&quot;高要市\&quot;},{\&quot;n\&quot;:\&quot;四会市\&quot;}]},{\&quot;n\&quot;:\&quot;惠州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;惠城区\&quot;},{\&quot;n\&quot;:\&quot;惠阳区\&quot;},{\&quot;n\&quot;:\&quot;博罗县\&quot;},{\&quot;n\&quot;:\&quot;惠东县\&quot;},{\&quot;n\&quot;:\&quot;龙门县\&quot;}]},{\&quot;n\&quot;:\&quot;梅州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;梅江区\&quot;},{\&quot;n\&quot;:\&quot;梅县\&quot;},{\&quot;n\&quot;:\&quot;大埔县\&quot;},{\&quot;n\&quot;:\&quot;丰顺县\&quot;},{\&quot;n\&quot;:\&quot;五华县\&quot;},{\&quot;n\&quot;:\&quot;平远县\&quot;},{\&quot;n\&quot;:\&quot;蕉岭县\&quot;},{\&quot;n\&quot;:\&quot;兴宁市\&quot;}]},{\&quot;n\&quot;:\&quot;汕尾市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;城区\&quot;},{\&quot;n\&quot;:\&quot;海丰县\&quot;},{\&quot;n\&quot;:\&quot;陆河县\&quot;},{\&quot;n\&quot;:\&quot;陆丰市\&quot;}]},{\&quot;n\&quot;:\&quot;河源市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;源城区\&quot;},{\&quot;n\&quot;:\&quot;紫金县\&quot;},{\&quot;n\&quot;:\&quot;龙川县\&quot;},{\&quot;n\&quot;:\&quot;连平县\&quot;},{\&quot;n\&quot;:\&quot;和平县\&quot;},{\&quot;n\&quot;:\&quot;东源县\&quot;}]},{\&quot;n\&quot;:\&quot;阳江市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;江城区\&quot;},{\&quot;n\&quot;:\&quot;阳西县\&quot;},{\&quot;n\&quot;:\&quot;阳东县\&quot;},{\&quot;n\&quot;:\&quot;阳春市\&quot;}]},{\&quot;n\&quot;:\&quot;清远市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;清城区\&quot;},{\&quot;n\&quot;:\&quot;清新区\&quot;},{\&quot;n\&quot;:\&quot;佛冈县\&quot;},{\&quot;n\&quot;:\&quot;阳山县\&quot;},{\&quot;n\&quot;:\&quot;连山壮族瑶族自治县\&quot;},{\&quot;n\&quot;:\&quot;连南瑶族自治县\&quot;},{\&quot;n\&quot;:\&quot;英德市\&quot;},{\&quot;n\&quot;:\&quot;连州市\&quot;}]},{\&quot;n\&quot;:\&quot;东莞市\&quot;},{\&quot;n\&quot;:\&quot;中山市\&quot;},{\&quot;n\&quot;:\&quot;潮州市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;湘桥区\&quot;},{\&quot;n\&quot;:\&quot;潮安区\&quot;},{\&quot;n\&quot;:\&quot;饶平县\&quot;}]},{\&quot;n\&quot;:\&quot;揭阳市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;榕城区\&quot;},{\&quot;n\&quot;:\&quot;揭东区\&quot;},{\&quot;n\&quot;:\&quot;揭西县\&quot;},{\&quot;n\&quot;:\&quot;惠来县\&quot;},{\&quot;n\&quot;:\&quot;普宁市\&quot;}]},{\&quot;n\&quot;:\&quot;云浮市\&quot;,\&quot;s\&quot;:[{\&quot;n\&quot;:\&quot;云城区\&quot;},{\&quot;n\&quot;:\&quot;新兴县\&quot;},{\&quot;n\&quot;:\&quot;郁南县\&quot;},{\&quot;n\&quot;:\&quot;云安县\&quot;},{\&quot;n\&quot;:\&quot;罗定市\&quot;}]}]}]&quot;;</span>
+<span class="nc" id="L301">        return data;</span>
+    }
+
+    /**
+     * 获取用户数据
+     */
+    @GetMapping(&quot;/userModel&quot;)
+    @ResponseBody
+    public AjaxResult userModel()
+    {
+<span class="nc" id="L311">        AjaxResult ajax = new AjaxResult();</span>
+
+<span class="nc" id="L313">        ajax.put(&quot;code&quot;, 200);</span>
+<span class="nc" id="L314">        ajax.put(&quot;value&quot;, users);</span>
+<span class="nc" id="L315">        return ajax;</span>
+    }
+
+    /**
+     * 获取数据集合
+     */
+    @GetMapping(&quot;/collection&quot;)
+    @ResponseBody
+    public AjaxResult collection()
+    {
+<span class="nc" id="L325">        String[] array = { &quot;ruoyi 1&quot;, &quot;ruoyi 2&quot;, &quot;ruoyi 3&quot;, &quot;ruoyi 4&quot;, &quot;ruoyi 5&quot; };</span>
+<span class="nc" id="L326">        AjaxResult ajax = new AjaxResult();</span>
+<span class="nc" id="L327">        ajax.put(&quot;value&quot;, array);</span>
+<span class="nc" id="L328">        return ajax;</span>
+    }
+}
+
+class UserFormModel
+{
+    /** 用户ID */
+    private int userId;
+
+    /** 用户编号 */
+    private String userCode;
+
+    /** 用户姓名 */
+    private String userName;
+
+    /** 用户手机 */
+    private String userPhone;
+
+    public UserFormModel()
+<span class="nc" id="L347">    {</span>
+
+<span class="nc" id="L349">    }</span>
+
+    public UserFormModel(int userId, String userCode, String userName, String userPhone)
+<span class="nc" id="L352">    {</span>
+<span class="nc" id="L353">        this.userId = userId;</span>
+<span class="nc" id="L354">        this.userCode = userCode;</span>
+<span class="nc" id="L355">        this.userName = userName;</span>
+<span class="nc" id="L356">        this.userPhone = userPhone;</span>
+<span class="nc" id="L357">    }</span>
+
+    public int getUserId()
+    {
+<span class="nc" id="L361">        return userId;</span>
+    }
+
+    public void setUserId(int userId)
+    {
+<span class="nc" id="L366">        this.userId = userId;</span>
+<span class="nc" id="L367">    }</span>
+
+    public String getUserCode()
+    {
+<span class="nc" id="L371">        return userCode;</span>
+    }
+
+    public void setUserCode(String userCode)
+    {
+<span class="nc" id="L376">        this.userCode = userCode;</span>
+<span class="nc" id="L377">    }</span>
+
+    public String getUserName()
+    {
+<span class="nc" id="L381">        return userName;</span>
+    }
+
+    public void setUserName(String userName)
+    {
+<span class="nc" id="L386">        this.userName = userName;</span>
+<span class="nc" id="L387">    }</span>
+
+    public String getUserPhone()
+    {
+<span class="nc" id="L391">        return userPhone;</span>
+    }
+
+    public void setUserPhone(String userPhone)
+    {
+<span class="nc" id="L396">        this.userPhone = userPhone;</span>
+<span class="nc" id="L397">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

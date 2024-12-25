@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}登录{% endblock %}
+
+{% block content %}
+
+{% set messages_shown = False %}  {# 初始化消息显示标记为False #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages and not messages_shown %}  {# 只有当有消息且还没显示过时才执行显示逻辑 #}
+        {% set messages_shown = True %}  {# 将标记设置为True，表示消息已显示 #}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <script>
+            // 获取所有显示的提示消息元素（这里通过查找具有特定class的div元素来定位）
+            var alertElements = document.querySelectorAll('.alert');
+            // 遍历每个提示消息元素
+            alertElements.forEach(function (alertElement) {
+                // 设置一个定时器，4秒（4000毫秒）后隐藏该提示消息元素
+                setTimeout(function () {
+                    alertElement.style.display = 'none';
+                }, 3000);
+            });
+        </script>
+    {% endif %}
+{% endwith %}
+
+
+
+<h2 class="mt-4">登录</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="username" class="form-label">用户名</label>
+        <input type="text" name="username" class="form-control" id="username" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">密码</label>
+        <input type="password" name="password" class="form-control" id="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">登录</button>
+</form>
+<p class="mt-3">没有账户？<a href="{{ url_for('register') }}">注册</a></p>
+{% endblock %}

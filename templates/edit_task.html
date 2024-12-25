@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}编辑任务{% endblock %}
+{% block content %}
+    <h2>编辑任务</h2>
+    <form method="POST" action="{{ url_for('edit_task', task_id=task_id) }}">
+        <div class="mb-3">
+            <label for="task_name" class="form-label">任务名称</label>
+            <input type="text" name="task_name" id="task_name" class="form-control" value="{{ task.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="cron_expression" class="form-label">Cron 表达式</label>
+            <input type="text" name="cron_expression" id="cron_expression" class="form-control" value="{{ task.cron }}" required>
+            <div class="form-text">示例: `*/5 * * * *` (每 5 分钟执行一次)</div>
+        </div>
+        <button type="submit" class="btn btn-success">保存修改</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysProfileController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.system</a> &gt; <span class="el_source">SysProfileController.java</span></div><h1>SysProfileController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.system;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
+import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.system.service.ISysUserService;
+
+/**
+ * 个人信息 业务处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/system/user/profile&quot;)
+<span class="nc" id="L35">public class SysProfileController extends BaseController</span>
+{
+<span class="nc" id="L37">    private static final Logger log = LoggerFactory.getLogger(SysProfileController.class);</span>
+
+<span class="nc" id="L39">    private String prefix = &quot;system/user/profile&quot;;</span>
+
+    @Autowired
+    private ISysUserService userService;
+    
+    @Autowired
+    private SysPasswordService passwordService;
+
+    /**
+     * 个人信息
+     */
+    @GetMapping()
+    public String profile(ModelMap mmap)
+    {
+<span class="nc" id="L53">        SysUser user = getSysUser();</span>
+<span class="nc" id="L54">        mmap.put(&quot;user&quot;, user);</span>
+<span class="nc" id="L55">        mmap.put(&quot;roleGroup&quot;, userService.selectUserRoleGroup(user.getUserId()));</span>
+<span class="nc" id="L56">        mmap.put(&quot;postGroup&quot;, userService.selectUserPostGroup(user.getUserId()));</span>
+<span class="nc" id="L57">        return prefix + &quot;/profile&quot;;</span>
+    }
+
+    @GetMapping(&quot;/checkPassword&quot;)
+    @ResponseBody
+    public boolean checkPassword(String password)
+    {
+<span class="nc" id="L64">        SysUser user = getSysUser();</span>
+<span class="nc" id="L65">        return passwordService.matches(user, password);</span>
+    }
+
+    @GetMapping(&quot;/resetPwd&quot;)
+    public String resetPwd(ModelMap mmap)
+    {
+<span class="nc" id="L71">        SysUser user = getSysUser();</span>
+<span class="nc" id="L72">        mmap.put(&quot;user&quot;, userService.selectUserById(user.getUserId()));</span>
+<span class="nc" id="L73">        return prefix + &quot;/resetPwd&quot;;</span>
+    }
+
+    @Log(title = &quot;重置密码&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/resetPwd&quot;)
+    @ResponseBody
+    public AjaxResult resetPwd(String oldPassword, String newPassword)
+    {
+<span class="nc" id="L81">        SysUser user = getSysUser();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!passwordService.matches(user, oldPassword))</span>
+        {
+<span class="nc" id="L84">            return error(&quot;修改密码失败，旧密码错误&quot;);</span>
+        }
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (passwordService.matches(user, newPassword))</span>
+        {
+<span class="nc" id="L88">            return error(&quot;新密码不能与旧密码相同&quot;);</span>
+        }
+<span class="nc" id="L90">        user.setSalt(ShiroUtils.randomSalt());</span>
+<span class="nc" id="L91">        user.setPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));</span>
+<span class="nc" id="L92">        user.setPwdUpdateDate(DateUtils.getNowDate());</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (userService.resetUserPwd(user) &gt; 0)</span>
+        {
+<span class="nc" id="L95">            setSysUser(userService.selectUserById(user.getUserId()));</span>
+<span class="nc" id="L96">            return success();</span>
+        }
+<span class="nc" id="L98">        return error(&quot;修改密码异常，请联系管理员&quot;);</span>
+    }
+
+    /**
+     * 修改用户
+     */
+    @GetMapping(&quot;/edit&quot;)
+    public String edit(ModelMap mmap)
+    {
+<span class="nc" id="L107">        SysUser user = getSysUser();</span>
+<span class="nc" id="L108">        mmap.put(&quot;user&quot;, userService.selectUserById(user.getUserId()));</span>
+<span class="nc" id="L109">        return prefix + &quot;/edit&quot;;</span>
+    }
+
+    /**
+     * 修改头像
+     */
+    @GetMapping(&quot;/avatar&quot;)
+    public String avatar(ModelMap mmap)
+    {
+<span class="nc" id="L118">        SysUser user = getSysUser();</span>
+<span class="nc" id="L119">        mmap.put(&quot;user&quot;, userService.selectUserById(user.getUserId()));</span>
+<span class="nc" id="L120">        return prefix + &quot;/avatar&quot;;</span>
+    }
+
+    /**
+     * 修改用户
+     */
+    @Log(title = &quot;个人信息&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/update&quot;)
+    @ResponseBody
+    public AjaxResult update(SysUser user)
+    {
+<span class="nc" id="L131">        SysUser currentUser = getSysUser();</span>
+<span class="nc" id="L132">        currentUser.setUserName(user.getUserName());</span>
+<span class="nc" id="L133">        currentUser.setEmail(user.getEmail());</span>
+<span class="nc" id="L134">        currentUser.setPhonenumber(user.getPhonenumber());</span>
+<span class="nc" id="L135">        currentUser.setSex(user.getSex());</span>
+<span class="nc bnc" id="L136" title="All 4 branches missed.">        if (StringUtils.isNotEmpty(user.getPhonenumber()) &amp;&amp; !userService.checkPhoneUnique(currentUser))</span>
+        {
+<span class="nc" id="L138">            return error(&quot;修改用户'&quot; + currentUser.getLoginName() + &quot;'失败，手机号码已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L140" title="All 4 branches missed.">        else if (StringUtils.isNotEmpty(user.getEmail()) &amp;&amp; !userService.checkEmailUnique(currentUser))</span>
+        {
+<span class="nc" id="L142">            return error(&quot;修改用户'&quot; + currentUser.getLoginName() + &quot;'失败，邮箱账号已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (userService.updateUserInfo(currentUser) &gt; 0)</span>
+        {
+<span class="nc" id="L146">            setSysUser(userService.selectUserById(currentUser.getUserId()));</span>
+<span class="nc" id="L147">            return success();</span>
+        }
+<span class="nc" id="L149">        return error();</span>
+    }
+
+    /**
+     * 保存头像
+     */
+    @Log(title = &quot;个人信息&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/updateAvatar&quot;)
+    @ResponseBody
+    public AjaxResult updateAvatar(@RequestParam(&quot;avatarfile&quot;) MultipartFile file)
+    {
+<span class="nc" id="L160">        SysUser currentUser = getSysUser();</span>
+        try
+        {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (!file.isEmpty())</span>
+            {
+<span class="nc" id="L165">                String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);</span>
+<span class="nc" id="L166">                currentUser.setAvatar(avatar);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (userService.updateUserInfo(currentUser) &gt; 0)</span>
+                {
+<span class="nc" id="L169">                    setSysUser(userService.selectUserById(currentUser.getUserId()));</span>
+<span class="nc" id="L170">                    return success();</span>
+                }
+            }
+<span class="nc" id="L173">            return error();</span>
+        }
+<span class="nc" id="L175">        catch (Exception e)</span>
+        {
+<span class="nc" id="L177">            log.error(&quot;修改头像失败！&quot;, e);</span>
+<span class="nc" id="L178">            return error(e.getMessage());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

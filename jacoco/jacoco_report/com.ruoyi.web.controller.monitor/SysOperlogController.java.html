@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysOperlogController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.monitor</a> &gt; <span class="el_source">SysOperlogController.java</span></div><h1>SysOperlogController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.monitor;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.SysOperLog;
+import com.ruoyi.system.service.ISysOperLogService;
+
+/**
+ * 操作日志记录
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/monitor/operlog&quot;)
+<span class="nc" id="L29">public class SysOperlogController extends BaseController</span>
+{
+<span class="nc" id="L31">    private String prefix = &quot;monitor/operlog&quot;;</span>
+
+    @Autowired
+    private ISysOperLogService operLogService;
+
+    @RequiresPermissions(&quot;monitor:operlog:view&quot;)
+    @GetMapping()
+    public String operlog()
+    {
+<span class="nc" id="L40">        return prefix + &quot;/operlog&quot;;</span>
+    }
+
+    @RequiresPermissions(&quot;monitor:operlog:list&quot;)
+    @PostMapping(&quot;/list&quot;)
+    @ResponseBody
+    public TableDataInfo list(SysOperLog operLog)
+    {
+<span class="nc" id="L48">        startPage();</span>
+<span class="nc" id="L49">        List&lt;SysOperLog&gt; list = operLogService.selectOperLogList(operLog);</span>
+<span class="nc" id="L50">        return getDataTable(list);</span>
+    }
+
+    @Log(title = &quot;操作日志&quot;, businessType = BusinessType.EXPORT)
+    @RequiresPermissions(&quot;monitor:operlog:export&quot;)
+    @PostMapping(&quot;/export&quot;)
+    @ResponseBody
+    public AjaxResult export(SysOperLog operLog)
+    {
+<span class="nc" id="L59">        List&lt;SysOperLog&gt; list = operLogService.selectOperLogList(operLog);</span>
+<span class="nc" id="L60">        ExcelUtil&lt;SysOperLog&gt; util = new ExcelUtil&lt;SysOperLog&gt;(SysOperLog.class);</span>
+<span class="nc" id="L61">        return util.exportExcel(list, &quot;操作日志&quot;);</span>
+    }
+
+    @Log(title = &quot;操作日志&quot;, businessType = BusinessType.DELETE)
+    @RequiresPermissions(&quot;monitor:operlog:remove&quot;)
+    @PostMapping(&quot;/remove&quot;)
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+<span class="nc" id="L70">        return toAjax(operLogService.deleteOperLogByIds(ids));</span>
+    }
+
+    @RequiresPermissions(&quot;monitor:operlog:detail&quot;)
+    @GetMapping(&quot;/detail/{operId}&quot;)
+    public String detail(@PathVariable(&quot;operId&quot;) Long operId, ModelMap mmap)
+    {
+<span class="nc" id="L77">        mmap.put(&quot;operLog&quot;, operLogService.selectOperLogById(operId));</span>
+<span class="nc" id="L78">        return prefix + &quot;/detail&quot;;</span>
+    }
+    
+    @Log(title = &quot;操作日志&quot;, businessType = BusinessType.CLEAN)
+    @RequiresPermissions(&quot;monitor:operlog:remove&quot;)
+    @PostMapping(&quot;/clean&quot;)
+    @ResponseBody
+    public AjaxResult clean()
+    {
+<span class="nc" id="L87">        operLogService.cleanOperLog();</span>
+<span class="nc" id="L88">        return success();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

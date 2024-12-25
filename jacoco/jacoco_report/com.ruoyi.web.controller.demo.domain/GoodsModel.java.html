@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GoodsModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.domain</a> &gt; <span class="el_source">GoodsModel.java</span></div><h1>GoodsModel.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.domain;
+
+import java.util.Date;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+/**
+ * 商品测试信息
+ * 
+ * @author ruoyi
+ */
+<span class="nc" id="L12">public class GoodsModel</span>
+{
+    /**
+     * 商品名称
+     */
+    private String name;
+
+    /**
+     * 商品重量
+     */
+    private Integer weight;
+
+    /**
+     * 商品价格
+     */
+    private Double price;
+    
+    /**
+     * 商品日期
+     */
+    private Date date;
+
+    /**
+     * 商品种类
+     */
+    private String type;
+
+    public String getName()
+    {
+<span class="nc" id="L41">        return name;</span>
+    }
+
+    public void setName(String name)
+    {
+<span class="nc" id="L46">        this.name = name;</span>
+<span class="nc" id="L47">    }</span>
+
+    public Integer getWeight()
+    {
+<span class="nc" id="L51">        return weight;</span>
+    }
+
+    public void setWeight(Integer weight)
+    {
+<span class="nc" id="L56">        this.weight = weight;</span>
+<span class="nc" id="L57">    }</span>
+
+    public Double getPrice()
+    {
+<span class="nc" id="L61">        return price;</span>
+    }
+
+    public void setPrice(Double price)
+    {
+<span class="nc" id="L66">        this.price = price;</span>
+<span class="nc" id="L67">    }</span>
+
+    public Date getDate()
+    {
+<span class="nc" id="L71">        return date;</span>
+    }
+
+    public void setDate(Date date)
+    {
+<span class="nc" id="L76">        this.date = date;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getType()
+    {
+<span class="nc" id="L81">        return type;</span>
+    }
+
+    public void setType(String type)
+    {
+<span class="nc" id="L86">        this.type = type;</span>
+<span class="nc" id="L87">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L91">        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)</span>
+<span class="nc" id="L92">            .append(&quot;name&quot;, getName())</span>
+<span class="nc" id="L93">            .append(&quot;weight&quot;, getWeight())</span>
+<span class="nc" id="L94">            .append(&quot;price&quot;, getPrice())</span>
+<span class="nc" id="L95">            .append(&quot;date&quot;, getDate())</span>
+<span class="nc" id="L96">            .append(&quot;type&quot;, getType())</span>
+<span class="nc" id="L97">            .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

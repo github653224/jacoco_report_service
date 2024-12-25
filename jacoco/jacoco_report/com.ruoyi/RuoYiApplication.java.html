@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RuoYiApplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi</a> &gt; <span class="el_source">RuoYiApplication.java</span></div><h1>RuoYiApplication.java</h1><pre class="source lang-java linenums">package com.ruoyi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
+/**
+ * 启动程序
+ * 
+ * @author ruoyi
+ */
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+<span class="nc" id="L13">public class RuoYiApplication</span>
+{
+    public static void main(String[] args)
+    {
+        // System.setProperty(&quot;spring.devtools.restart.enabled&quot;, &quot;false&quot;);
+<span class="nc" id="L18">        SpringApplication.run(RuoYiApplication.class, args);</span>
+<span class="nc" id="L19">        System.out.println(&quot;(♥◠‿◠)ﾉﾞ  若依启动成功   ლ(´ڡ`ლ)ﾞ  \n&quot; +</span>
+                &quot; .-------.       ____     __        \n&quot; +
+                &quot; |  _ _   \\      \\   \\   /  /    \n&quot; +
+                &quot; | ( ' )  |       \\  _. /  '       \n&quot; +
+                &quot; |(_ o _) /        _( )_ .'         \n&quot; +
+                &quot; | (_,_).' __  ___(_ o _)'          \n&quot; +
+                &quot; |  |\\ \\  |  ||   |(_,_)'         \n&quot; +
+                &quot; |  | \\ `'   /|   `-'  /           \n&quot; +
+                &quot; |  |  \\    /  \\      /           \n&quot; +
+                &quot; ''-'   `'-'    `-..-'              &quot;);
+<span class="nc" id="L29">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

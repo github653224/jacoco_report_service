@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <title>{% block title %}Flask App{% endblock %}</title>
+<!-- 页面其他自定义的CSS文件引入（如果有），放在Bootstrap CSS后面，便于覆盖样式时生效 -->
+    {% block custom_css %}
+    <style>
+        /* 全局通用样式，所有继承自base.html的页面都会应用这些样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 这里可以添加更多通用的页面样式，比如头部、导航栏等的样式 */
+
+        /* 以下是之前提到的与显示用户名相关的样式，整合到这里 */
+       .header-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+       .user-info-container {
+            display: flex;
+            align-items: center;
+        }
+
+       .user-info {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        /* 例如任务管理相关表格的样式等，可以根据实际需求添加更多样式规则 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+    </style>
+{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    {% block scripts %}{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 页面其他自定义的JS文件引入（如果有），放在Bootstrap JS前面，便于自定义逻辑先执行 -->
+    {% block custom_js %}{% endblock %}
+</body>
+
+</html>

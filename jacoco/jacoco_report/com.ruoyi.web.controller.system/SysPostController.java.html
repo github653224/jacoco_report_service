@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysPostController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.system</a> &gt; <span class="el_source">SysPostController.java</span></div><h1>SysPostController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.system;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.SysPost;
+import com.ruoyi.system.service.ISysPostService;
+
+/**
+ * 岗位信息操作处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/system/post&quot;)
+<span class="nc" id="L30">public class SysPostController extends BaseController</span>
+{
+<span class="nc" id="L32">    private String prefix = &quot;system/post&quot;;</span>
+
+    @Autowired
+    private ISysPostService postService;
+
+    @RequiresPermissions(&quot;system:post:view&quot;)
+    @GetMapping()
+    public String operlog()
+    {
+<span class="nc" id="L41">        return prefix + &quot;/post&quot;;</span>
+    }
+
+    @RequiresPermissions(&quot;system:post:list&quot;)
+    @PostMapping(&quot;/list&quot;)
+    @ResponseBody
+    public TableDataInfo list(SysPost post)
+    {
+<span class="nc" id="L49">        startPage();</span>
+<span class="nc" id="L50">        List&lt;SysPost&gt; list = postService.selectPostList(post);</span>
+<span class="nc" id="L51">        return getDataTable(list);</span>
+    }
+
+    @Log(title = &quot;岗位管理&quot;, businessType = BusinessType.EXPORT)
+    @RequiresPermissions(&quot;system:post:export&quot;)
+    @PostMapping(&quot;/export&quot;)
+    @ResponseBody
+    public AjaxResult export(SysPost post)
+    {
+<span class="nc" id="L60">        List&lt;SysPost&gt; list = postService.selectPostList(post);</span>
+<span class="nc" id="L61">        ExcelUtil&lt;SysPost&gt; util = new ExcelUtil&lt;SysPost&gt;(SysPost.class);</span>
+<span class="nc" id="L62">        return util.exportExcel(list, &quot;岗位数据&quot;);</span>
+    }
+
+    @RequiresPermissions(&quot;system:post:remove&quot;)
+    @Log(title = &quot;岗位管理&quot;, businessType = BusinessType.DELETE)
+    @PostMapping(&quot;/remove&quot;)
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+        try
+        {
+<span class="nc" id="L73">            return toAjax(postService.deletePostByIds(ids));</span>
+        }
+<span class="nc" id="L75">        catch (Exception e)</span>
+        {
+<span class="nc" id="L77">            return error(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * 新增岗位
+     */
+    @GetMapping(&quot;/add&quot;)
+    public String add()
+    {
+<span class="nc" id="L87">        return prefix + &quot;/add&quot;;</span>
+    }
+
+    /**
+     * 新增保存岗位
+     */
+    @RequiresPermissions(&quot;system:post:add&quot;)
+    @Log(title = &quot;岗位管理&quot;, businessType = BusinessType.INSERT)
+    @PostMapping(&quot;/add&quot;)
+    @ResponseBody
+    public AjaxResult addSave(@Validated SysPost post)
+    {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (!postService.checkPostNameUnique(post))</span>
+        {
+<span class="nc" id="L101">            return error(&quot;新增岗位'&quot; + post.getPostName() + &quot;'失败，岗位名称已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        else if (!postService.checkPostCodeUnique(post))</span>
+        {
+<span class="nc" id="L105">            return error(&quot;新增岗位'&quot; + post.getPostName() + &quot;'失败，岗位编码已存在&quot;);</span>
+        }
+<span class="nc" id="L107">        post.setCreateBy(getLoginName());</span>
+<span class="nc" id="L108">        return toAjax(postService.insertPost(post));</span>
+    }
+
+    /**
+     * 修改岗位
+     */
+    @RequiresPermissions(&quot;system:post:edit&quot;)
+    @GetMapping(&quot;/edit/{postId}&quot;)
+    public String edit(@PathVariable(&quot;postId&quot;) Long postId, ModelMap mmap)
+    {
+<span class="nc" id="L118">        mmap.put(&quot;post&quot;, postService.selectPostById(postId));</span>
+<span class="nc" id="L119">        return prefix + &quot;/edit&quot;;</span>
+    }
+
+    /**
+     * 修改保存岗位
+     */
+    @RequiresPermissions(&quot;system:post:edit&quot;)
+    @Log(title = &quot;岗位管理&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/edit&quot;)
+    @ResponseBody
+    public AjaxResult editSave(@Validated SysPost post)
+    {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (!postService.checkPostNameUnique(post))</span>
+        {
+<span class="nc" id="L133">            return error(&quot;修改岗位'&quot; + post.getPostName() + &quot;'失败，岗位名称已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        else if (!postService.checkPostCodeUnique(post))</span>
+        {
+<span class="nc" id="L137">            return error(&quot;修改岗位'&quot; + post.getPostName() + &quot;'失败，岗位编码已存在&quot;);</span>
+        }
+<span class="nc" id="L139">        post.setUpdateBy(getLoginName());</span>
+<span class="nc" id="L140">        return toAjax(postService.updatePost(post));</span>
+    }
+
+    /**
+     * 校验岗位名称
+     */
+    @PostMapping(&quot;/checkPostNameUnique&quot;)
+    @ResponseBody
+    public boolean checkPostNameUnique(SysPost post)
+    {
+<span class="nc" id="L150">        return postService.checkPostNameUnique(post);</span>
+    }
+
+    /**
+     * 校验岗位编码
+     */
+    @PostMapping(&quot;/checkPostCodeUnique&quot;)
+    @ResponseBody
+    public boolean checkPostCodeUnique(SysPost post)
+    {
+<span class="nc" id="L160">        return postService.checkPostCodeUnique(post);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

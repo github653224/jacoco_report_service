@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysIndexController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.system</a> &gt; <span class="el_source">SysIndexController.java</span></div><h1>SysIndexController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.system;
+
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.constant.ShiroConstants;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysMenu;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.CookieUtils;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.system.service.ISysConfigService;
+import com.ruoyi.system.service.ISysMenuService;
+
+/**
+ * 首页 业务处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+<span class="nc" id="L35">public class SysIndexController extends BaseController</span>
+{
+    @Autowired
+    private ISysMenuService menuService;
+
+    @Autowired
+    private ISysConfigService configService;
+
+    @Autowired
+    private SysPasswordService passwordService;
+
+    // 系统首页
+    @GetMapping(&quot;/index&quot;)
+    public String index(ModelMap mmap)
+    {
+        // 取身份信息
+<span class="nc" id="L51">        SysUser user = getSysUser();</span>
+        // 根据用户id取出菜单
+<span class="nc" id="L53">        List&lt;SysMenu&gt; menus = menuService.selectMenusByUser(user);</span>
+<span class="nc" id="L54">        mmap.put(&quot;menus&quot;, menus);</span>
+<span class="nc" id="L55">        mmap.put(&quot;user&quot;, user);</span>
+<span class="nc" id="L56">        mmap.put(&quot;sideTheme&quot;, configService.selectConfigByKey(&quot;sys.index.sideTheme&quot;));</span>
+<span class="nc" id="L57">        mmap.put(&quot;skinName&quot;, configService.selectConfigByKey(&quot;sys.index.skinName&quot;));</span>
+<span class="nc" id="L58">        Boolean footer = Convert.toBool(configService.selectConfigByKey(&quot;sys.index.footer&quot;), true);</span>
+<span class="nc" id="L59">        Boolean tagsView = Convert.toBool(configService.selectConfigByKey(&quot;sys.index.tagsView&quot;), true);</span>
+<span class="nc" id="L60">        mmap.put(&quot;footer&quot;, footer);</span>
+<span class="nc" id="L61">        mmap.put(&quot;tagsView&quot;, tagsView);</span>
+<span class="nc" id="L62">        mmap.put(&quot;mainClass&quot;, contentMainClass(footer, tagsView));</span>
+<span class="nc" id="L63">        mmap.put(&quot;copyrightYear&quot;, RuoYiConfig.getCopyrightYear());</span>
+<span class="nc" id="L64">        mmap.put(&quot;demoEnabled&quot;, RuoYiConfig.isDemoEnabled());</span>
+<span class="nc" id="L65">        mmap.put(&quot;isDefaultModifyPwd&quot;, initPasswordIsModify(user.getPwdUpdateDate()));</span>
+<span class="nc" id="L66">        mmap.put(&quot;isPasswordExpired&quot;, passwordIsExpiration(user.getPwdUpdateDate()));</span>
+<span class="nc" id="L67">        mmap.put(&quot;isMobile&quot;, ServletUtils.checkAgentIsMobile(ServletUtils.getRequest().getHeader(&quot;User-Agent&quot;)));</span>
+
+        // 菜单导航显示风格
+<span class="nc" id="L70">        String menuStyle = configService.selectConfigByKey(&quot;sys.index.menuStyle&quot;);</span>
+        // 移动端，默认使左侧导航菜单，否则取默认配置
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        String indexStyle = ServletUtils.checkAgentIsMobile(ServletUtils.getRequest().getHeader(&quot;User-Agent&quot;)) ? &quot;index&quot; : menuStyle;</span>
+
+        // 优先Cookie配置导航菜单
+<span class="nc" id="L75">        Cookie[] cookies = ServletUtils.getRequest().getCookies();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        for (Cookie cookie : cookies)</span>
+        {
+<span class="nc bnc" id="L78" title="All 4 branches missed.">            if (StringUtils.isNotEmpty(cookie.getName()) &amp;&amp; &quot;nav-style&quot;.equalsIgnoreCase(cookie.getName()))</span>
+            {
+<span class="nc" id="L80">                indexStyle = cookie.getValue();</span>
+<span class="nc" id="L81">                break;</span>
+            }
+        }
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        String webIndex = &quot;topnav&quot;.equalsIgnoreCase(indexStyle) ? &quot;index-topnav&quot; : &quot;index&quot;;</span>
+<span class="nc" id="L85">        return webIndex;</span>
+    }
+
+    // 锁定屏幕
+    @GetMapping(&quot;/lockscreen&quot;)
+    public String lockscreen(ModelMap mmap)
+    {
+<span class="nc" id="L92">        mmap.put(&quot;user&quot;, getSysUser());</span>
+<span class="nc" id="L93">        ServletUtils.getSession().setAttribute(ShiroConstants.LOCK_SCREEN, true);</span>
+<span class="nc" id="L94">        return &quot;lock&quot;;</span>
+    }
+
+    // 解锁屏幕
+    @PostMapping(&quot;/unlockscreen&quot;)
+    @ResponseBody
+    public AjaxResult unlockscreen(String password)
+    {
+<span class="nc" id="L102">        SysUser user = getSysUser();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (StringUtils.isNull(user))</span>
+        {
+<span class="nc" id="L105">            return AjaxResult.error(&quot;服务器超时，请重新登录&quot;);</span>
+        }
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (passwordService.matches(user, password))</span>
+        {
+<span class="nc" id="L109">            ServletUtils.getSession().removeAttribute(ShiroConstants.LOCK_SCREEN);</span>
+<span class="nc" id="L110">            return AjaxResult.success();</span>
+        }
+<span class="nc" id="L112">        return AjaxResult.error(&quot;密码不正确，请重新输入。&quot;);</span>
+    }
+
+    // 切换主题
+    @GetMapping(&quot;/system/switchSkin&quot;)
+    public String switchSkin()
+    {
+<span class="nc" id="L119">        return &quot;skin&quot;;</span>
+    }
+
+    // 切换菜单
+    @GetMapping(&quot;/system/menuStyle/{style}&quot;)
+    public void menuStyle(@PathVariable String style, HttpServletResponse response)
+    {
+<span class="nc" id="L126">        CookieUtils.setCookie(response, &quot;nav-style&quot;, style);</span>
+<span class="nc" id="L127">    }</span>
+
+    // 系统介绍
+    @GetMapping(&quot;/system/main&quot;)
+    public String main(ModelMap mmap)
+    {
+<span class="nc" id="L133">        mmap.put(&quot;version&quot;, RuoYiConfig.getVersion());</span>
+<span class="nc" id="L134">        return &quot;main&quot;;</span>
+    }
+
+    // content-main class
+    public String contentMainClass(Boolean footer, Boolean tagsView)
+    {
+<span class="nc bnc" id="L140" title="All 4 branches missed.">        if (!footer &amp;&amp; !tagsView)</span>
+        {
+<span class="nc" id="L142">            return &quot;tagsview-footer-hide&quot;;</span>
+        }
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        else if (!footer)</span>
+        {
+<span class="nc" id="L146">            return &quot;footer-hide&quot;;</span>
+        }
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        else if (!tagsView)</span>
+        {
+<span class="nc" id="L150">            return &quot;tagsview-hide&quot;;</span>
+        }
+<span class="nc" id="L152">        return StringUtils.EMPTY;</span>
+    }
+
+    // 检查初始密码是否提醒修改
+    public boolean initPasswordIsModify(Date pwdUpdateDate)
+    {
+<span class="nc" id="L158">        Integer initPasswordModify = Convert.toInt(configService.selectConfigByKey(&quot;sys.account.initPasswordModify&quot;));</span>
+<span class="nc bnc" id="L159" title="All 6 branches missed.">        return initPasswordModify != null &amp;&amp; initPasswordModify == 1 &amp;&amp; pwdUpdateDate == null;</span>
+    }
+
+    // 检查密码是否过期
+    public boolean passwordIsExpiration(Date pwdUpdateDate)
+    {
+<span class="nc" id="L165">        Integer passwordValidateDays = Convert.toInt(configService.selectConfigByKey(&quot;sys.account.passwordValidateDays&quot;));</span>
+<span class="nc bnc" id="L166" title="All 4 branches missed.">        if (passwordValidateDays != null &amp;&amp; passwordValidateDays &gt; 0)</span>
+        {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (StringUtils.isNull(pwdUpdateDate))</span>
+            {
+                // 如果从未修改过初始密码，直接提醒过期
+<span class="nc" id="L171">                return true;</span>
+            }
+<span class="nc" id="L173">            Date nowDate = DateUtils.getNowDate();</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            return DateUtils.differentDaysByMillisecond(nowDate, pwdUpdateDate) &gt; passwordValidateDays;</span>
+        }
+<span class="nc" id="L176">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

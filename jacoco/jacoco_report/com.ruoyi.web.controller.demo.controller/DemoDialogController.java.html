@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DemoDialogController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.controller</a> &gt; <span class="el_source">DemoDialogController.java</span></div><h1>DemoDialogController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 模态窗口
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/demo/modal&quot;)
+<span class="nc" id="L14">public class DemoDialogController</span>
+{
+<span class="nc" id="L16">    private String prefix = &quot;demo/modal&quot;;</span>
+
+    /**
+     * 模态窗口
+     */
+    @GetMapping(&quot;/dialog&quot;)
+    public String dialog()
+    {
+<span class="nc" id="L24">        return prefix + &quot;/dialog&quot;;</span>
+    }
+
+    /**
+     * 弹层组件
+     */
+    @GetMapping(&quot;/layer&quot;)
+    public String layer()
+    {
+<span class="nc" id="L33">        return prefix + &quot;/layer&quot;;</span>
+    }
+
+    /**
+     * 表单
+     */
+    @GetMapping(&quot;/form&quot;)
+    public String form()
+    {
+<span class="nc" id="L42">        return prefix + &quot;/form&quot;;</span>
+    }
+
+    /**
+     * 表格
+     */
+    @GetMapping(&quot;/table&quot;)
+    public String table()
+    {
+<span class="nc" id="L51">        return prefix + &quot;/table&quot;;</span>
+    }
+
+    /**
+     * 表格check
+     */
+    @GetMapping(&quot;/check&quot;)
+    public String check()
+    {
+<span class="nc" id="L60">        return prefix + &quot;/table/check&quot;;</span>
+    }
+
+    /**
+     * 表格radio
+     */
+    @GetMapping(&quot;/radio&quot;)
+    public String radio()
+    {
+<span class="nc" id="L69">        return prefix + &quot;/table/radio&quot;;</span>
+    }
+
+    /**
+     * 表格回传父窗体
+     */
+    @GetMapping(&quot;/parent&quot;)
+    public String parent()
+    {
+<span class="nc" id="L78">        return prefix + &quot;/table/parent&quot;;</span>
+    }
+
+    /**
+     * 多层窗口frame1
+     */
+    @GetMapping(&quot;/frame1&quot;)
+    public String frame1()
+    {
+<span class="nc" id="L87">        return prefix + &quot;/table/frame1&quot;;</span>
+    }
+
+    /**
+     * 多层窗口frame2
+     */
+    @GetMapping(&quot;/frame2&quot;)
+    public String frame2()
+    {
+<span class="nc" id="L96">        return prefix + &quot;/table/frame2&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

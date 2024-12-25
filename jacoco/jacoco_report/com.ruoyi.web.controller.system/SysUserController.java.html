@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysUserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.system</a> &gt; <span class="el_source">SysUserController.java</span></div><h1>SysUserController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.system;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Ztree;
+import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.common.core.domain.entity.SysRole;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.framework.shiro.util.AuthorizationUtils;
+import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysPostService;
+import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.ISysUserService;
+
+/**
+ * 用户信息
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/system/user&quot;)
+<span class="nc" id="L45">public class SysUserController extends BaseController</span>
+{
+<span class="nc" id="L47">    private String prefix = &quot;system/user&quot;;</span>
+
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private ISysRoleService roleService;
+    
+    @Autowired
+    private ISysDeptService deptService;
+
+    @Autowired
+    private ISysPostService postService;
+
+    @Autowired
+    private SysPasswordService passwordService;
+
+    @RequiresPermissions(&quot;system:user:view&quot;)
+    @GetMapping()
+    public String user()
+    {
+<span class="nc" id="L68">        return prefix + &quot;/user&quot;;</span>
+    }
+
+    @RequiresPermissions(&quot;system:user:list&quot;)
+    @PostMapping(&quot;/list&quot;)
+    @ResponseBody
+    public TableDataInfo list(SysUser user)
+    {
+<span class="nc" id="L76">        startPage();</span>
+<span class="nc" id="L77">        List&lt;SysUser&gt; list = userService.selectUserList(user);</span>
+<span class="nc" id="L78">        return getDataTable(list);</span>
+    }
+
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.EXPORT)
+    @RequiresPermissions(&quot;system:user:export&quot;)
+    @PostMapping(&quot;/export&quot;)
+    @ResponseBody
+    public AjaxResult export(SysUser user)
+    {
+<span class="fc" id="L87">        List&lt;SysUser&gt; list = userService.selectUserList(user);</span>
+<span class="fc" id="L88">        ExcelUtil&lt;SysUser&gt; util = new ExcelUtil&lt;SysUser&gt;(SysUser.class);</span>
+<span class="fc" id="L89">        return util.exportExcel(list, &quot;用户数据&quot;);</span>
+    }
+
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.IMPORT)
+    @RequiresPermissions(&quot;system:user:import&quot;)
+    @PostMapping(&quot;/importData&quot;)
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+<span class="nc" id="L98">        ExcelUtil&lt;SysUser&gt; util = new ExcelUtil&lt;SysUser&gt;(SysUser.class);</span>
+<span class="nc" id="L99">        List&lt;SysUser&gt; userList = util.importExcel(file.getInputStream());</span>
+<span class="nc" id="L100">        String message = userService.importUser(userList, updateSupport, getLoginName());</span>
+<span class="nc" id="L101">        return AjaxResult.success(message);</span>
+    }
+
+    @RequiresPermissions(&quot;system:user:view&quot;)
+    @GetMapping(&quot;/importTemplate&quot;)
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+<span class="nc" id="L109">        ExcelUtil&lt;SysUser&gt; util = new ExcelUtil&lt;SysUser&gt;(SysUser.class);</span>
+<span class="nc" id="L110">        return util.importTemplateExcel(&quot;用户数据&quot;);</span>
+    }
+
+    /**
+     * 新增用户
+     */
+    @GetMapping(&quot;/add&quot;)
+    public String add(ModelMap mmap)
+    {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        mmap.put(&quot;roles&quot;, roleService.selectRoleAll().stream().filter(r -&gt; !r.isAdmin()).collect(Collectors.toList()));</span>
+<span class="nc" id="L120">        mmap.put(&quot;posts&quot;, postService.selectPostAll());</span>
+<span class="nc" id="L121">        return prefix + &quot;/add&quot;;</span>
+    }
+
+    /**
+     * 新增保存用户
+     */
+    @RequiresPermissions(&quot;system:user:add&quot;)
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.INSERT)
+    @PostMapping(&quot;/add&quot;)
+    @ResponseBody
+    public AjaxResult addSave(@Validated SysUser user)
+    {
+<span class="nc" id="L133">        deptService.checkDeptDataScope(user.getDeptId());</span>
+<span class="nc" id="L134">        roleService.checkRoleDataScope(user.getRoleIds());</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (!userService.checkLoginNameUnique(user))</span>
+        {
+<span class="nc" id="L137">            return error(&quot;新增用户'&quot; + user.getLoginName() + &quot;'失败，登录账号已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        else if (StringUtils.isNotEmpty(user.getPhonenumber()) &amp;&amp; !userService.checkPhoneUnique(user))</span>
+        {
+<span class="nc" id="L141">            return error(&quot;新增用户'&quot; + user.getLoginName() + &quot;'失败，手机号码已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        else if (StringUtils.isNotEmpty(user.getEmail()) &amp;&amp; !userService.checkEmailUnique(user))</span>
+        {
+<span class="nc" id="L145">            return error(&quot;新增用户'&quot; + user.getLoginName() + &quot;'失败，邮箱账号已存在&quot;);</span>
+        }
+<span class="nc" id="L147">        user.setSalt(ShiroUtils.randomSalt());</span>
+<span class="nc" id="L148">        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));</span>
+<span class="nc" id="L149">        user.setPwdUpdateDate(DateUtils.getNowDate());</span>
+<span class="nc" id="L150">        user.setCreateBy(getLoginName());</span>
+<span class="nc" id="L151">        return toAjax(userService.insertUser(user));</span>
+    }
+
+    /**
+     * 修改用户
+     */
+    @RequiresPermissions(&quot;system:user:edit&quot;)
+    @GetMapping(&quot;/edit/{userId}&quot;)
+    public String edit(@PathVariable(&quot;userId&quot;) Long userId, ModelMap mmap)
+    {
+<span class="nc" id="L161">        userService.checkUserDataScope(userId);</span>
+<span class="nc" id="L162">        List&lt;SysRole&gt; roles = roleService.selectRolesByUserId(userId);</span>
+<span class="nc" id="L163">        mmap.put(&quot;user&quot;, userService.selectUserById(userId));</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        mmap.put(&quot;roles&quot;, SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -&gt; !r.isAdmin()).collect(Collectors.toList()));</span>
+<span class="nc" id="L165">        mmap.put(&quot;posts&quot;, postService.selectPostsByUserId(userId));</span>
+<span class="nc" id="L166">        return prefix + &quot;/edit&quot;;</span>
+    }
+
+    /**
+     * 查询用户详细
+     */
+    @RequiresPermissions(&quot;system:user:list&quot;)
+    @GetMapping(&quot;/view/{userId}&quot;)
+    public String view(@PathVariable(&quot;userId&quot;) Long userId, ModelMap mmap)
+    {
+<span class="nc" id="L176">        userService.checkUserDataScope(userId);</span>
+<span class="nc" id="L177">        mmap.put(&quot;user&quot;, userService.selectUserById(userId));</span>
+<span class="nc" id="L178">        mmap.put(&quot;roleGroup&quot;, userService.selectUserRoleGroup(userId));</span>
+<span class="nc" id="L179">        mmap.put(&quot;postGroup&quot;, userService.selectUserPostGroup(userId));</span>
+<span class="nc" id="L180">        return prefix + &quot;/view&quot;;</span>
+    }
+
+    /**
+     * 修改保存用户
+     */
+    @RequiresPermissions(&quot;system:user:edit&quot;)
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/edit&quot;)
+    @ResponseBody
+    public AjaxResult editSave(@Validated SysUser user)
+    {
+<span class="nc" id="L192">        userService.checkUserAllowed(user);</span>
+<span class="nc" id="L193">        userService.checkUserDataScope(user.getUserId());</span>
+<span class="nc" id="L194">        deptService.checkDeptDataScope(user.getDeptId());</span>
+<span class="nc" id="L195">        roleService.checkRoleDataScope(user.getRoleIds());</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        if (!userService.checkLoginNameUnique(user))</span>
+        {
+<span class="nc" id="L198">            return error(&quot;修改用户'&quot; + user.getLoginName() + &quot;'失败，登录账号已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L200" title="All 4 branches missed.">        else if (StringUtils.isNotEmpty(user.getPhonenumber()) &amp;&amp; !userService.checkPhoneUnique(user))</span>
+        {
+<span class="nc" id="L202">            return error(&quot;修改用户'&quot; + user.getLoginName() + &quot;'失败，手机号码已存在&quot;);</span>
+        }
+<span class="nc bnc" id="L204" title="All 4 branches missed.">        else if (StringUtils.isNotEmpty(user.getEmail()) &amp;&amp; !userService.checkEmailUnique(user))</span>
+        {
+<span class="nc" id="L206">            return error(&quot;修改用户'&quot; + user.getLoginName() + &quot;'失败，邮箱账号已存在&quot;);</span>
+        }
+<span class="nc" id="L208">        user.setUpdateBy(getLoginName());</span>
+<span class="nc" id="L209">        AuthorizationUtils.clearAllCachedAuthorizationInfo();</span>
+<span class="nc" id="L210">        return toAjax(userService.updateUser(user));</span>
+    }
+
+    @RequiresPermissions(&quot;system:user:resetPwd&quot;)
+    @GetMapping(&quot;/resetPwd/{userId}&quot;)
+    public String resetPwd(@PathVariable(&quot;userId&quot;) Long userId, ModelMap mmap)
+    {
+<span class="nc" id="L217">        mmap.put(&quot;user&quot;, userService.selectUserById(userId));</span>
+<span class="nc" id="L218">        return prefix + &quot;/resetPwd&quot;;</span>
+    }
+
+    @RequiresPermissions(&quot;system:user:resetPwd&quot;)
+    @Log(title = &quot;重置密码&quot;, businessType = BusinessType.UPDATE)
+    @PostMapping(&quot;/resetPwd&quot;)
+    @ResponseBody
+    public AjaxResult resetPwdSave(SysUser user)
+    {
+<span class="nc" id="L227">        userService.checkUserAllowed(user);</span>
+<span class="nc" id="L228">        userService.checkUserDataScope(user.getUserId());</span>
+<span class="nc" id="L229">        user.setSalt(ShiroUtils.randomSalt());</span>
+<span class="nc" id="L230">        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        if (userService.resetUserPwd(user) &gt; 0)</span>
+        {
+<span class="nc bnc" id="L233" title="All 2 branches missed.">            if (ShiroUtils.getUserId().longValue() == user.getUserId().longValue())</span>
+            {
+<span class="nc" id="L235">                setSysUser(userService.selectUserById(user.getUserId()));</span>
+            }
+<span class="nc" id="L237">            return success();</span>
+        }
+<span class="nc" id="L239">        return error();</span>
+    }
+
+    /**
+     * 进入授权角色页
+     */
+    @GetMapping(&quot;/authRole/{userId}&quot;)
+    public String authRole(@PathVariable(&quot;userId&quot;) Long userId, ModelMap mmap)
+    {
+<span class="nc" id="L248">        SysUser user = userService.selectUserById(userId);</span>
+        // 获取用户所属的角色列表
+<span class="nc" id="L250">        List&lt;SysRole&gt; roles = roleService.selectRolesByUserId(userId);</span>
+<span class="nc" id="L251">        mmap.put(&quot;user&quot;, user);</span>
+<span class="nc bnc" id="L252" title="All 4 branches missed.">        mmap.put(&quot;roles&quot;, SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -&gt; !r.isAdmin()).collect(Collectors.toList()));</span>
+<span class="nc" id="L253">        return prefix + &quot;/authRole&quot;;</span>
+    }
+
+    /**
+     * 用户授权角色
+     */
+    @RequiresPermissions(&quot;system:user:edit&quot;)
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.GRANT)
+    @PostMapping(&quot;/authRole/insertAuthRole&quot;)
+    @ResponseBody
+    public AjaxResult insertAuthRole(Long userId, Long[] roleIds)
+    {
+<span class="nc" id="L265">        userService.checkUserDataScope(userId);</span>
+<span class="nc" id="L266">        roleService.checkRoleDataScope(roleIds);</span>
+<span class="nc" id="L267">        userService.insertUserAuth(userId, roleIds);</span>
+<span class="nc" id="L268">        AuthorizationUtils.clearAllCachedAuthorizationInfo();</span>
+<span class="nc" id="L269">        return success();</span>
+    }
+
+    @RequiresPermissions(&quot;system:user:remove&quot;)
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.DELETE)
+    @PostMapping(&quot;/remove&quot;)
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (ArrayUtils.contains(Convert.toLongArray(ids), getUserId()))</span>
+        {
+<span class="nc" id="L280">            return error(&quot;当前用户不能删除&quot;);</span>
+        }
+<span class="nc" id="L282">        return toAjax(userService.deleteUserByIds(ids));</span>
+    }
+
+    /**
+     * 校验用户名
+     */
+    @PostMapping(&quot;/checkLoginNameUnique&quot;)
+    @ResponseBody
+    public boolean checkLoginNameUnique(SysUser user)
+    {
+<span class="nc" id="L292">        return userService.checkLoginNameUnique(user);</span>
+    }
+
+    /**
+     * 校验手机号码
+     */
+    @PostMapping(&quot;/checkPhoneUnique&quot;)
+    @ResponseBody
+    public boolean checkPhoneUnique(SysUser user)
+    {
+<span class="nc" id="L302">        return userService.checkPhoneUnique(user);</span>
+    }
+
+    /**
+     * 校验email邮箱
+     */
+    @PostMapping(&quot;/checkEmailUnique&quot;)
+    @ResponseBody
+    public boolean checkEmailUnique(SysUser user)
+    {
+<span class="nc" id="L312">        return userService.checkEmailUnique(user);</span>
+    }
+
+    /**
+     * 用户状态修改
+     */
+    @Log(title = &quot;用户管理&quot;, businessType = BusinessType.UPDATE)
+    @RequiresPermissions(&quot;system:user:edit&quot;)
+    @PostMapping(&quot;/changeStatus&quot;)
+    @ResponseBody
+    public AjaxResult changeStatus(SysUser user)
+    {
+<span class="nc" id="L324">        userService.checkUserAllowed(user);</span>
+<span class="nc" id="L325">        userService.checkUserDataScope(user.getUserId());</span>
+<span class="nc" id="L326">        return toAjax(userService.changeStatus(user));</span>
+    }
+
+    /**
+     * 加载部门列表树
+     */
+    @RequiresPermissions(&quot;system:user:list&quot;)
+    @GetMapping(&quot;/deptTreeData&quot;)
+    @ResponseBody
+    public List&lt;Ztree&gt; deptTreeData()
+    {
+<span class="nc" id="L337">        List&lt;Ztree&gt; ztrees = deptService.selectDeptTree(new SysDept());</span>
+<span class="nc" id="L338">        return ztrees;</span>
+    }
+
+    /**
+     * 选择部门树
+     * 
+     * @param deptId 部门ID
+     */
+    @RequiresPermissions(&quot;system:user:list&quot;)
+    @GetMapping(&quot;/selectDeptTree/{deptId}&quot;)
+    public String selectDeptTree(@PathVariable(&quot;deptId&quot;) Long deptId, ModelMap mmap)
+    {
+<span class="nc" id="L350">        mmap.put(&quot;dept&quot;, deptService.selectDeptById(deptId));</span>
+<span class="nc" id="L351">        return prefix + &quot;/deptTree&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

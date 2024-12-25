@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SysDictTypeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.system</a> &gt; <span class="el_source">SysDictTypeController.java</span></div><h1>SysDictTypeController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.system;
+
+import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Ztree;
+import com.ruoyi.common.core.domain.entity.SysDictType;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.service.ISysDictTypeService;
+
+/**
+ * 数据字典信息
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/system/dict&quot;)
+<span class="nc" id="L31">public class SysDictTypeController extends BaseController</span>
+{
+<span class="nc" id="L33">    private String prefix = &quot;system/dict/type&quot;;</span>
+
+    @Autowired
+    private ISysDictTypeService dictTypeService;
+
+    @RequiresPermissions(&quot;system:dict:view&quot;)
+    @GetMapping()
+    public String dictType()
+    {
+<span class="nc" id="L42">        return prefix + &quot;/type&quot;;</span>
+    }
+
+    @PostMapping(&quot;/list&quot;)
+    @RequiresPermissions(&quot;system:dict:list&quot;)
+    @ResponseBody
+    public TableDataInfo list(SysDictType dictType)
+    {
+<span class="nc" id="L50">        startPage();</span>
+<span class="nc" id="L51">        List&lt;SysDictType&gt; list = dictTypeService.selectDictTypeList(dictType);</span>
+<span class="nc" id="L52">        return getDataTable(list);</span>
+    }
+
+    @Log(title = &quot;字典类型&quot;, businessType = BusinessType.EXPORT)
+    @RequiresPermissions(&quot;system:dict:export&quot;)
+    @PostMapping(&quot;/export&quot;)
+    @ResponseBody
+    public AjaxResult export(SysDictType dictType)
+    {
+
+<span class="nc" id="L62">        List&lt;SysDictType&gt; list = dictTypeService.selectDictTypeList(dictType);</span>
+<span class="nc" id="L63">        ExcelUtil&lt;SysDictType&gt; util = new ExcelUtil&lt;SysDictType&gt;(SysDictType.class);</span>
+<span class="nc" id="L64">        return util.exportExcel(list, &quot;字典类型&quot;);</span>
+    }
+
+    /**
+     * 新增字典类型
+     */
+    @GetMapping(&quot;/add&quot;)
+    public String add()
+    {
+<span class="nc" id="L73">        return prefix + &quot;/add&quot;;</span>
+    }
+
+    /**
+     * 新增保存字典类型
+     */
+    @Log(title = &quot;字典类型&quot;, businessType = BusinessType.INSERT)
+    @RequiresPermissions(&quot;system:dict:add&quot;)
+    @PostMapping(&quot;/add&quot;)
+    @ResponseBody
+    public AjaxResult addSave(@Validated SysDictType dict)
+    {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (!dictTypeService.checkDictTypeUnique(dict))</span>
+        {
+<span class="nc" id="L87">            return error(&quot;新增字典'&quot; + dict.getDictName() + &quot;'失败，字典类型已存在&quot;);</span>
+        }
+<span class="nc" id="L89">        dict.setCreateBy(getLoginName());</span>
+<span class="nc" id="L90">        return toAjax(dictTypeService.insertDictType(dict));</span>
+    }
+
+    /**
+     * 修改字典类型
+     */
+    @RequiresPermissions(&quot;system:dict:edit&quot;)
+    @GetMapping(&quot;/edit/{dictId}&quot;)
+    public String edit(@PathVariable(&quot;dictId&quot;) Long dictId, ModelMap mmap)
+    {
+<span class="nc" id="L100">        mmap.put(&quot;dict&quot;, dictTypeService.selectDictTypeById(dictId));</span>
+<span class="nc" id="L101">        return prefix + &quot;/edit&quot;;</span>
+    }
+
+    /**
+     * 修改保存字典类型
+     */
+    @Log(title = &quot;字典类型&quot;, businessType = BusinessType.UPDATE)
+    @RequiresPermissions(&quot;system:dict:edit&quot;)
+    @PostMapping(&quot;/edit&quot;)
+    @ResponseBody
+    public AjaxResult editSave(@Validated SysDictType dict)
+    {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (!dictTypeService.checkDictTypeUnique(dict))</span>
+        {
+<span class="nc" id="L115">            return error(&quot;修改字典'&quot; + dict.getDictName() + &quot;'失败，字典类型已存在&quot;);</span>
+        }
+<span class="nc" id="L117">        dict.setUpdateBy(getLoginName());</span>
+<span class="nc" id="L118">        return toAjax(dictTypeService.updateDictType(dict));</span>
+    }
+
+    @Log(title = &quot;字典类型&quot;, businessType = BusinessType.DELETE)
+    @RequiresPermissions(&quot;system:dict:remove&quot;)
+    @PostMapping(&quot;/remove&quot;)
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+<span class="nc" id="L127">        dictTypeService.deleteDictTypeByIds(ids);</span>
+<span class="nc" id="L128">        return success();</span>
+    }
+
+    /**
+     * 刷新字典缓存
+     */
+    @RequiresPermissions(&quot;system:dict:remove&quot;)
+    @Log(title = &quot;字典类型&quot;, businessType = BusinessType.CLEAN)
+    @GetMapping(&quot;/refreshCache&quot;)
+    @ResponseBody
+    public AjaxResult refreshCache()
+    {
+<span class="nc" id="L140">        dictTypeService.resetDictCache();</span>
+<span class="nc" id="L141">        return success();</span>
+    }
+
+    /**
+     * 查询字典详细
+     */
+    @RequiresPermissions(&quot;system:dict:list&quot;)
+    @GetMapping(&quot;/detail/{dictId}&quot;)
+    public String detail(@PathVariable(&quot;dictId&quot;) Long dictId, ModelMap mmap)
+    {
+<span class="nc" id="L151">        mmap.put(&quot;dict&quot;, dictTypeService.selectDictTypeById(dictId));</span>
+<span class="nc" id="L152">        mmap.put(&quot;dictList&quot;, dictTypeService.selectDictTypeAll());</span>
+<span class="nc" id="L153">        return &quot;system/dict/data/data&quot;;</span>
+    }
+
+    /**
+     * 校验字典类型
+     */
+    @PostMapping(&quot;/checkDictTypeUnique&quot;)
+    @ResponseBody
+    public boolean checkDictTypeUnique(SysDictType dictType)
+    {
+<span class="nc" id="L163">        return dictTypeService.checkDictTypeUnique(dictType);</span>
+    }
+
+    /**
+     * 选择字典树
+     */
+    @GetMapping(&quot;/selectDictTree/{columnId}/{dictType}&quot;)
+    public String selectDeptTree(@PathVariable(&quot;columnId&quot;) Long columnId, @PathVariable(&quot;dictType&quot;) String dictType,
+            ModelMap mmap)
+    {
+<span class="nc" id="L173">        mmap.put(&quot;columnId&quot;, columnId);</span>
+<span class="nc" id="L174">        mmap.put(&quot;dict&quot;, dictTypeService.selectDictTypeByType(dictType));</span>
+<span class="nc" id="L175">        return prefix + &quot;/tree&quot;;</span>
+    }
+
+    /**
+     * 加载字典列表树
+     */
+    @GetMapping(&quot;/treeData&quot;)
+    @ResponseBody
+    public List&lt;Ztree&gt; treeData()
+    {
+<span class="nc" id="L185">        List&lt;Ztree&gt; ztrees = dictTypeService.selectDictTree(new SysDictType());</span>
+<span class="nc" id="L186">        return ztrees;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DemoOperateController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.controller</a> &gt; <span class="el_source">DemoOperateController.java</span></div><h1>DemoOperateController.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.controller;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.web.controller.demo.domain.CustomerModel;
+import com.ruoyi.web.controller.demo.domain.UserOperateModel;
+
+/**
+ * 操作控制
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping(&quot;/demo/operate&quot;)
+<span class="nc" id="L34">public class DemoOperateController extends BaseController</span>
+{
+<span class="nc" id="L36">    private String prefix = &quot;demo/operate&quot;;</span>
+
+<span class="nc" id="L38">    private final static Map&lt;Integer, UserOperateModel&gt; users = new LinkedHashMap&lt;Integer, UserOperateModel&gt;();</span>
+    {
+<span class="nc" id="L40">        users.put(1, new UserOperateModel(1, &quot;1000001&quot;, &quot;测试1&quot;, &quot;0&quot;, &quot;15888888888&quot;, &quot;ry@qq.com&quot;, 150.0, &quot;0&quot;));</span>
+<span class="nc" id="L41">        users.put(2, new UserOperateModel(2, &quot;1000002&quot;, &quot;测试2&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 180.0, &quot;1&quot;));</span>
+<span class="nc" id="L42">        users.put(3, new UserOperateModel(3, &quot;1000003&quot;, &quot;测试3&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 110.0, &quot;1&quot;));</span>
+<span class="nc" id="L43">        users.put(4, new UserOperateModel(4, &quot;1000004&quot;, &quot;测试4&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 220.0, &quot;1&quot;));</span>
+<span class="nc" id="L44">        users.put(5, new UserOperateModel(5, &quot;1000005&quot;, &quot;测试5&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 140.0, &quot;1&quot;));</span>
+<span class="nc" id="L45">        users.put(6, new UserOperateModel(6, &quot;1000006&quot;, &quot;测试6&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 330.0, &quot;1&quot;));</span>
+<span class="nc" id="L46">        users.put(7, new UserOperateModel(7, &quot;1000007&quot;, &quot;测试7&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 160.0, &quot;1&quot;));</span>
+<span class="nc" id="L47">        users.put(8, new UserOperateModel(8, &quot;1000008&quot;, &quot;测试8&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 170.0, &quot;1&quot;));</span>
+<span class="nc" id="L48">        users.put(9, new UserOperateModel(9, &quot;1000009&quot;, &quot;测试9&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 180.0, &quot;1&quot;));</span>
+<span class="nc" id="L49">        users.put(10, new UserOperateModel(10, &quot;1000010&quot;, &quot;测试10&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 210.0, &quot;1&quot;));</span>
+<span class="nc" id="L50">        users.put(11, new UserOperateModel(11, &quot;1000011&quot;, &quot;测试11&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 110.0, &quot;1&quot;));</span>
+<span class="nc" id="L51">        users.put(12, new UserOperateModel(12, &quot;1000012&quot;, &quot;测试12&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 120.0, &quot;1&quot;));</span>
+<span class="nc" id="L52">        users.put(13, new UserOperateModel(13, &quot;1000013&quot;, &quot;测试13&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 380.0, &quot;1&quot;));</span>
+<span class="nc" id="L53">        users.put(14, new UserOperateModel(14, &quot;1000014&quot;, &quot;测试14&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 280.0, &quot;1&quot;));</span>
+<span class="nc" id="L54">        users.put(15, new UserOperateModel(15, &quot;1000015&quot;, &quot;测试15&quot;, &quot;0&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 570.0, &quot;1&quot;));</span>
+<span class="nc" id="L55">        users.put(16, new UserOperateModel(16, &quot;1000016&quot;, &quot;测试16&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 260.0, &quot;1&quot;));</span>
+<span class="nc" id="L56">        users.put(17, new UserOperateModel(17, &quot;1000017&quot;, &quot;测试17&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 210.0, &quot;1&quot;));</span>
+<span class="nc" id="L57">        users.put(18, new UserOperateModel(18, &quot;1000018&quot;, &quot;测试18&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 340.0, &quot;1&quot;));</span>
+<span class="nc" id="L58">        users.put(19, new UserOperateModel(19, &quot;1000019&quot;, &quot;测试19&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 160.0, &quot;1&quot;));</span>
+<span class="nc" id="L59">        users.put(20, new UserOperateModel(20, &quot;1000020&quot;, &quot;测试20&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 220.0, &quot;1&quot;));</span>
+<span class="nc" id="L60">        users.put(21, new UserOperateModel(21, &quot;1000021&quot;, &quot;测试21&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 120.0, &quot;1&quot;));</span>
+<span class="nc" id="L61">        users.put(22, new UserOperateModel(22, &quot;1000022&quot;, &quot;测试22&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 130.0, &quot;1&quot;));</span>
+<span class="nc" id="L62">        users.put(23, new UserOperateModel(23, &quot;1000023&quot;, &quot;测试23&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 490.0, &quot;1&quot;));</span>
+<span class="nc" id="L63">        users.put(24, new UserOperateModel(24, &quot;1000024&quot;, &quot;测试24&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 570.0, &quot;1&quot;));</span>
+<span class="nc" id="L64">        users.put(25, new UserOperateModel(25, &quot;1000025&quot;, &quot;测试25&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 250.0, &quot;1&quot;));</span>
+<span class="nc" id="L65">        users.put(26, new UserOperateModel(26, &quot;1000026&quot;, &quot;测试26&quot;, &quot;1&quot;, &quot;15666666666&quot;, &quot;ry@qq.com&quot;, 250.0, &quot;1&quot;));</span>
+<span class="nc" id="L66">    }</span>
+
+    /**
+     * 表格
+     */
+    @GetMapping(&quot;/table&quot;)
+    public String table()
+    {
+<span class="nc" id="L74">        return prefix + &quot;/table&quot;;</span>
+    }
+
+    /**
+     * 其他
+     */
+    @GetMapping(&quot;/other&quot;)
+    public String other()
+    {
+<span class="nc" id="L83">        return prefix + &quot;/other&quot;;</span>
+    }
+
+    /**
+     * 查询数据
+     */
+    @PostMapping(&quot;/list&quot;)
+    @ResponseBody
+    public TableDataInfo list(UserOperateModel userModel)
+    {
+<span class="nc" id="L93">        TableDataInfo rspData = new TableDataInfo();</span>
+<span class="nc" id="L94">        List&lt;UserOperateModel&gt; userList = new ArrayList&lt;UserOperateModel&gt;(users.values());</span>
+        // 查询条件过滤
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (StringUtils.isNotEmpty(userModel.getSearchValue()))</span>
+        {
+<span class="nc" id="L98">            userList.clear();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for (Map.Entry&lt;Integer, UserOperateModel&gt; entry : users.entrySet())</span>
+            {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                if (entry.getValue().getUserName().equals(userModel.getSearchValue()))</span>
+                {
+<span class="nc" id="L103">                    userList.add(entry.getValue());</span>
+                }
+<span class="nc" id="L105">            }</span>
+        }
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        else if (StringUtils.isNotEmpty(userModel.getUserName()))</span>
+        {
+<span class="nc" id="L109">            userList.clear();</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            for (Map.Entry&lt;Integer, UserOperateModel&gt; entry : users.entrySet())</span>
+            {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if (entry.getValue().getUserName().equals(userModel.getUserName()))</span>
+                {
+<span class="nc" id="L114">                    userList.add(entry.getValue());</span>
+                }
+<span class="nc" id="L116">            }</span>
+        }
+<span class="nc" id="L118">        PageDomain pageDomain = TableSupport.buildPageRequest();</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize())</span>
+        {
+<span class="nc" id="L121">            rspData.setRows(userList);</span>
+<span class="nc" id="L122">            rspData.setTotal(userList.size());</span>
+<span class="nc" id="L123">            return rspData;</span>
+        }
+<span class="nc" id="L125">        Integer pageNum = (pageDomain.getPageNum() - 1) * 10;</span>
+<span class="nc" id="L126">        Integer pageSize = pageDomain.getPageNum() * 10;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (pageSize &gt; userList.size())</span>
+        {
+<span class="nc" id="L129">            pageSize = userList.size();</span>
+        }
+<span class="nc" id="L131">        rspData.setRows(userList.subList(pageNum, pageSize));</span>
+<span class="nc" id="L132">        rspData.setTotal(userList.size());</span>
+<span class="nc" id="L133">        return rspData;</span>
+    }
+
+    /**
+     * 新增用户
+     */
+    @GetMapping(&quot;/add&quot;)
+    public String add(ModelMap mmap)
+    {
+<span class="nc" id="L142">        return prefix + &quot;/add&quot;;</span>
+    }
+
+    /**
+     * 新增保存用户
+     */
+    @PostMapping(&quot;/add&quot;)
+    @ResponseBody
+    public AjaxResult addSave(UserOperateModel user)
+    {
+<span class="nc" id="L152">        Integer userId = users.size() + 1;</span>
+<span class="nc" id="L153">        user.setUserId(userId);</span>
+<span class="nc" id="L154">        return AjaxResult.success(users.put(userId, user));</span>
+    }
+
+    /**
+     * 新增保存主子表信息
+     */
+    @PostMapping(&quot;/customer/add&quot;)
+    @ResponseBody
+    public AjaxResult addSave(CustomerModel customerModel)
+    {
+<span class="nc" id="L164">        System.out.println(customerModel.toString());</span>
+<span class="nc" id="L165">        return AjaxResult.success();</span>
+    }
+
+    /**
+     * 修改用户
+     */
+    @GetMapping(&quot;/edit/{userId}&quot;)
+    public String edit(@PathVariable(&quot;userId&quot;) Integer userId, ModelMap mmap)
+    {
+<span class="nc" id="L174">        mmap.put(&quot;user&quot;, users.get(userId));</span>
+<span class="nc" id="L175">        return prefix + &quot;/edit&quot;;</span>
+    }
+
+    /**
+     * 修改保存用户
+     */
+    @PostMapping(&quot;/edit&quot;)
+    @ResponseBody
+    public AjaxResult editSave(UserOperateModel user)
+    {
+<span class="nc" id="L185">        return AjaxResult.success(users.put(user.getUserId(), user));</span>
+    }
+
+    /**
+     * 导出
+     */
+    @PostMapping(&quot;/export&quot;)
+    @ResponseBody
+    public AjaxResult export(UserOperateModel user)
+    {
+<span class="nc" id="L195">        List&lt;UserOperateModel&gt; list = new ArrayList&lt;UserOperateModel&gt;(users.values());</span>
+<span class="nc" id="L196">        ExcelUtil&lt;UserOperateModel&gt; util = new ExcelUtil&lt;UserOperateModel&gt;(UserOperateModel.class);</span>
+<span class="nc" id="L197">        return util.exportExcel(list, &quot;用户数据&quot;);</span>
+    }
+
+    /**
+     * 下载模板
+     */
+    @GetMapping(&quot;/importTemplate&quot;)
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+<span class="nc" id="L207">        ExcelUtil&lt;UserOperateModel&gt; util = new ExcelUtil&lt;UserOperateModel&gt;(UserOperateModel.class);</span>
+<span class="nc" id="L208">        return util.importTemplateExcel(&quot;用户数据&quot;);</span>
+    }
+
+    /**
+     * 导入数据
+     */
+    @PostMapping(&quot;/importData&quot;)
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+<span class="nc" id="L218">        ExcelUtil&lt;UserOperateModel&gt; util = new ExcelUtil&lt;UserOperateModel&gt;(UserOperateModel.class);</span>
+<span class="nc" id="L219">        List&lt;UserOperateModel&gt; userList = util.importExcel(file.getInputStream());</span>
+<span class="nc" id="L220">        String message = importUser(userList, updateSupport);</span>
+<span class="nc" id="L221">        return AjaxResult.success(message);</span>
+    }
+
+    /**
+     * 删除用户
+     */
+    @PostMapping(&quot;/remove&quot;)
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+<span class="nc" id="L231">        Integer[] userIds = Convert.toIntArray(ids);</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        for (Integer userId : userIds)</span>
+        {
+<span class="nc" id="L234">            users.remove(userId);</span>
+        }
+<span class="nc" id="L236">        return AjaxResult.success();</span>
+    }
+
+    /**
+     * 查看详细
+     */
+    @GetMapping(&quot;/detail/{userId}&quot;)
+    public String detail(@PathVariable(&quot;userId&quot;) Integer userId, ModelMap mmap)
+    {
+<span class="nc" id="L245">        mmap.put(&quot;user&quot;, users.get(userId));</span>
+<span class="nc" id="L246">        return prefix + &quot;/detail&quot;;</span>
+    }
+
+    @PostMapping(&quot;/clean&quot;)
+    @ResponseBody
+    public AjaxResult clean()
+    {
+<span class="nc" id="L253">        users.clear();</span>
+<span class="nc" id="L254">        return success();</span>
+    }
+
+    /**
+     * 导入用户数据
+     * 
+     * @param userList 用户数据列表
+     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @return 结果
+     */
+    public String importUser(List&lt;UserOperateModel&gt; userList, Boolean isUpdateSupport)
+    {
+<span class="nc bnc" id="L266" title="All 4 branches missed.">        if (StringUtils.isNull(userList) || userList.size() == 0)</span>
+        {
+<span class="nc" id="L268">            throw new ServiceException(&quot;导入用户数据不能为空！&quot;);</span>
+        }
+<span class="nc" id="L270">        int successNum = 0;</span>
+<span class="nc" id="L271">        int failureNum = 0;</span>
+<span class="nc" id="L272">        StringBuilder successMsg = new StringBuilder();</span>
+<span class="nc" id="L273">        StringBuilder failureMsg = new StringBuilder();</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        for (UserOperateModel user : userList)</span>
+        {
+            try
+            {
+                // 验证是否存在这个用户
+<span class="nc" id="L279">                boolean userFlag = false;</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">                for (Map.Entry&lt;Integer, UserOperateModel&gt; entry : users.entrySet())</span>
+                {
+<span class="nc bnc" id="L282" title="All 2 branches missed.">                    if (entry.getValue().getUserName().equals(user.getUserName()))</span>
+                    {
+<span class="nc" id="L284">                        userFlag = true;</span>
+<span class="nc" id="L285">                        break;</span>
+                    }
+<span class="nc" id="L287">                }</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                if (!userFlag)</span>
+                {
+<span class="nc" id="L290">                    Integer userId = users.size() + 1;</span>
+<span class="nc" id="L291">                    user.setUserId(userId);</span>
+<span class="nc" id="L292">                    users.put(userId, user);</span>
+<span class="nc" id="L293">                    successNum++;</span>
+<span class="nc" id="L294">                    successMsg.append(&quot;&lt;br/&gt;&quot; + successNum + &quot;、用户 &quot; + user.getUserName() + &quot; 导入成功&quot;);</span>
+<span class="nc" id="L295">                }</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">                else if (isUpdateSupport)</span>
+                {
+<span class="nc" id="L298">                    users.put(user.getUserId(), user);</span>
+<span class="nc" id="L299">                    successNum++;</span>
+<span class="nc" id="L300">                    successMsg.append(&quot;&lt;br/&gt;&quot; + successNum + &quot;、用户 &quot; + user.getUserName() + &quot; 更新成功&quot;);</span>
+                }
+                else
+                {
+<span class="nc" id="L304">                    failureNum++;</span>
+<span class="nc" id="L305">                    failureMsg.append(&quot;&lt;br/&gt;&quot; + failureNum + &quot;、用户 &quot; + user.getUserName() + &quot; 已存在&quot;);</span>
+                }
+            }
+<span class="nc" id="L308">            catch (Exception e)</span>
+            {
+<span class="nc" id="L310">                failureNum++;</span>
+<span class="nc" id="L311">                String msg = &quot;&lt;br/&gt;&quot; + failureNum + &quot;、账号 &quot; + user.getUserName() + &quot; 导入失败：&quot;;</span>
+<span class="nc" id="L312">                failureMsg.append(msg + e.getMessage());</span>
+<span class="nc" id="L313">            }</span>
+<span class="nc" id="L314">        }</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">        if (failureNum &gt; 0)</span>
+        {
+<span class="nc" id="L317">            failureMsg.insert(0, &quot;很抱歉，导入失败！共 &quot; + failureNum + &quot; 条数据格式不正确，错误如下：&quot;);</span>
+<span class="nc" id="L318">            throw new ServiceException(failureMsg.toString());</span>
+        }
+        else
+        {
+<span class="nc" id="L322">            successMsg.insert(0, &quot;恭喜您，数据已全部导入成功！共 &quot; + successNum + &quot; 条，数据如下：&quot;);</span>
+        }
+<span class="nc" id="L324">        return successMsg.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>

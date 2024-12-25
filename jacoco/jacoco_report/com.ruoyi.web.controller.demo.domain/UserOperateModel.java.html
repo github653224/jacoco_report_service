@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserOperateModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.ruoyi.web.controller.demo.domain</a> &gt; <span class="el_source">UserOperateModel.java</span></div><h1>UserOperateModel.java</h1><pre class="source lang-java linenums">package com.ruoyi.web.controller.demo.domain;
+
+import java.util.Date;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.annotation.Excel.Type;
+import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.common.utils.DateUtils;
+
+public class UserOperateModel extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
+
+    private int userId;
+
+    @Excel(name = &quot;用户编号&quot;)
+    private String userCode;
+
+    @Excel(name = &quot;用户姓名&quot;)
+    private String userName;
+
+    @Excel(name = &quot;用户性别&quot;, readConverterExp = &quot;0=男,1=女,2=未知&quot;)
+    private String userSex;
+
+    @Excel(name = &quot;用户手机&quot;)
+    private String userPhone;
+
+    @Excel(name = &quot;用户邮箱&quot;)
+    private String userEmail;
+
+    @Excel(name = &quot;用户余额&quot;)
+    private double userBalance;
+
+    @Excel(name = &quot;用户状态&quot;, readConverterExp = &quot;0=正常,1=停用&quot;)
+    private String status;
+
+    @Excel(name = &quot;创建时间&quot;, width = 30, dateFormat = &quot;yyyy-MM-dd HH:mm:ss&quot;, type = Type.EXPORT)
+    private Date createTime;
+
+    public UserOperateModel()
+<span class="nc" id="L40">    {</span>
+
+<span class="nc" id="L42">    }</span>
+
+    public UserOperateModel(int userId, String userCode, String userName, String userSex, String userPhone,
+            String userEmail, double userBalance, String status)
+<span class="nc" id="L46">    {</span>
+<span class="nc" id="L47">        this.userId = userId;</span>
+<span class="nc" id="L48">        this.userCode = userCode;</span>
+<span class="nc" id="L49">        this.userName = userName;</span>
+<span class="nc" id="L50">        this.userSex = userSex;</span>
+<span class="nc" id="L51">        this.userPhone = userPhone;</span>
+<span class="nc" id="L52">        this.userEmail = userEmail;</span>
+<span class="nc" id="L53">        this.userBalance = userBalance;</span>
+<span class="nc" id="L54">        this.status = status;</span>
+<span class="nc" id="L55">        this.createTime = DateUtils.getNowDate();</span>
+<span class="nc" id="L56">    }</span>
+
+    public int getUserId()
+    {
+<span class="nc" id="L60">        return userId;</span>
+    }
+
+    public void setUserId(int userId)
+    {
+<span class="nc" id="L65">        this.userId = userId;</span>
+<span class="nc" id="L66">    }</span>
+
+    public String getUserCode()
+    {
+<span class="nc" id="L70">        return userCode;</span>
+    }
+
+    public void setUserCode(String userCode)
+    {
+<span class="nc" id="L75">        this.userCode = userCode;</span>
+<span class="nc" id="L76">    }</span>
+
+    public String getUserName()
+    {
+<span class="nc" id="L80">        return userName;</span>
+    }
+
+    public void setUserName(String userName)
+    {
+<span class="nc" id="L85">        this.userName = userName;</span>
+<span class="nc" id="L86">    }</span>
+
+    public String getUserSex()
+    {
+<span class="nc" id="L90">        return userSex;</span>
+    }
+
+    public void setUserSex(String userSex)
+    {
+<span class="nc" id="L95">        this.userSex = userSex;</span>
+<span class="nc" id="L96">    }</span>
+
+    public String getUserPhone()
+    {
+<span class="nc" id="L100">        return userPhone;</span>
+    }
+
+    public void setUserPhone(String userPhone)
+    {
+<span class="nc" id="L105">        this.userPhone = userPhone;</span>
+<span class="nc" id="L106">    }</span>
+
+    public String getUserEmail()
+    {
+<span class="nc" id="L110">        return userEmail;</span>
+    }
+
+    public void setUserEmail(String userEmail)
+    {
+<span class="nc" id="L115">        this.userEmail = userEmail;</span>
+<span class="nc" id="L116">    }</span>
+
+    public double getUserBalance()
+    {
+<span class="nc" id="L120">        return userBalance;</span>
+    }
+
+    public void setUserBalance(double userBalance)
+    {
+<span class="nc" id="L125">        this.userBalance = userBalance;</span>
+<span class="nc" id="L126">    }</span>
+
+    public String getStatus()
+    {
+<span class="nc" id="L130">        return status;</span>
+    }
+
+    public void setStatus(String status)
+    {
+<span class="nc" id="L135">        this.status = status;</span>
+<span class="nc" id="L136">    }</span>
+
+    @Override
+    public Date getCreateTime()
+    {
+<span class="nc" id="L141">        return createTime;</span>
+    }
+
+    @Override
+    public void setCreateTime(Date createTime)
+    {
+<span class="nc" id="L147">        this.createTime = createTime;</span>
+<span class="nc" id="L148">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202412050938</span></div></body></html>
